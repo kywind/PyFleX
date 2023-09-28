@@ -6,7 +6,7 @@ Install with docker
 
     docker pull xingyu/softgym
     docker run \
-        -v ${PWD}/PyFleX:/workspace/PyFleX \
+        -v ${PWD}:/workspace/PyFleX \
         -v ${CONDA_PREFIX}:/workspace/anaconda \
         -v /tmp/.X11-unix:/tmp/.X11-unix \
         --gpus all \
@@ -17,6 +17,6 @@ Install with docker
 
 Add following to ~/.bashrc
 
-    export PYFLEXROOT=${PWD}/PyFleX
+    export PYFLEXROOT=${PWD}
     export PYTHONPATH=${PYFLEXROOT}/bindings/build:$PYTHONPATH
     export LD_LIBRARY_PATH=${PYFLEXROOT}/external/SDL2-2.0.4/lib/x64:$LD_LIBRARY_PATH
