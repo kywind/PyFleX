@@ -4,6 +4,7 @@ PyFleX
 Install with docker
 ------------
 
+    conda install -c conda-forge pybind11  # or pip install "pybind11[global]"
     docker pull xingyu/softgym
     docker run \
         -v ${PWD}:/workspace/PyFleX \
