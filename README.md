@@ -18,6 +18,6 @@ Install with docker
 
 Add following to ~/.bashrc
 
-    export PYFLEXROOT=${PWD}
+    export PYFLEXROOT=/path/to/PyFleX  # change this to the path of this repo
     export PYTHONPATH=${PYFLEXROOT}/bindings/build:$PYTHONPATH
     export LD_LIBRARY_PATH=${PYFLEXROOT}/external/SDL2-2.0.4/lib/x64:$LD_LIBRARY_PATH
