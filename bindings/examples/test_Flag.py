@@ -34,7 +34,7 @@ def store_obj(p, dimx, dimy, des_dir, idx):
     fout.close()
 
 
-pyflex.init()
+pyflex.init(False)
 
 time_step = 200
 act_scale = 0.2
@@ -89,7 +89,8 @@ for i in range(time_step):
     update_params[3] = action[0]
     update_params[5] = action[2]
 
-    pyflex.step(update_params * dt, capture=1, path=os.path.join(des_dir, 'step_%d.tga' % i))
+    # pyflex.step(update_params * dt, capture=1, path=os.path.join(des_dir, 'step_%d.tga' % i))
+    pyflex.step()
     # time.sleep(0.03)
 
     if i == 0:
@@ -101,7 +102,8 @@ pyflex.set_scene(10, scene_params, 0)
 
 for i in range(time_step):
     pyflex.set_positions(pos_rec[i])
-    pyflex.render(capture=0, path=os.path.join(des_dir, 'render_%d.tga' % i))
+    # pyflex.render(capture=0, path=os.path.join(des_dir, 'render_%d.tga' % i))
+    pyflex.render()
     # time.sleep(0.03)
 
 

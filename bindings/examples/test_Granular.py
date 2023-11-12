@@ -13,7 +13,7 @@ os.system('mkdir -p ' + des_dir)
 
 time_step = 400
 
-pyflex.init()
+pyflex.init(False)
 
 scene_params = np.array([])
 pyflex.set_scene(13, scene_params, 0)

@@ -23,7 +23,7 @@ public:
 
 		if (1)
 		{
-			Mesh* mesh = ImportMesh(GetFilePathByPlatform("../../data/box.ply").c_str());
+			Mesh* mesh = ImportMesh(GetFilePathByPlatform("../../data/box.ply").c_str(), false);
 
 			// create a basic grid
 			for (int y=0; y < dimy; ++y)

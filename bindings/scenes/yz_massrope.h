@@ -27,7 +27,7 @@ public:
 		int group = 0;
 
 		Vec3 velocity = RandomUnitVector()*1.0f;
-		float size = radius*5.f;
+		float size = 0.1;
 
 		// void CreateParticleShape(const Mesh* srcMesh, Vec3 lower, Vec3 scale, float rotation, float spacing, Vec3 velocity, float invMass, bool rigid, float rigidStiffness, int phase, bool skin, float jitter=0.005f, Vec3 skinOffset=0.0f, float skinExpand=0.0f, Vec4 color=Vec4(0.0f), float springStiffness=0.0f)
 		char sphere_path[100];

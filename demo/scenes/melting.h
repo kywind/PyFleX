@@ -19,7 +19,7 @@ public:
 
 		const float spacing = g_params.radius*0.5f;
 
-		Mesh* mesh = ImportMesh(GetFilePathByPlatform("../../data/bunny.ply").c_str());
+		Mesh* mesh = ImportMesh(GetFilePathByPlatform("../../data/bunny.ply").c_str(), false);
 
 		int phase = NvFlexMakePhase(0, eNvFlexPhaseSelfCollide | eNvFlexPhaseFluid);
 		float size = 1.2f;

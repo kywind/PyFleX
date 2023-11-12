@@ -35,7 +35,9 @@ def rand_float(lo, hi):
 
 pyflex.set_screenWidth(screenWidth)
 pyflex.set_screenHeight(screenHeight)
-pyflex.init()
+pyflex.init(False)
+pyflex.set_light_dir(np.array([0.1, 2.0, 0.1]))
+pyflex.set_light_fov(70.)
 
 n_instance = 3
 dy_friction = args.friction

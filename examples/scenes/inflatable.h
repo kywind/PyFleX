@@ -92,7 +92,7 @@ public:
 		{
 			for (int i = 0; i < 4; ++i)
 			{
-				Mesh* mesh = ImportMesh(GetFilePathByPlatform(meshes[(i + y) & 1]).c_str());
+				Mesh* mesh = ImportMesh(GetFilePathByPlatform(meshes[(i + y) & 1]).c_str(), false);
 				mesh->Normalize();
 				mesh->Transform(TranslationMatrix(Point3(i*2.0f, 1.0f + y*2.0f, 1.5f)));
 

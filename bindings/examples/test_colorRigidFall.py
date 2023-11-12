@@ -8,7 +8,7 @@ def rand_float(lo, hi):
 	return np.random.rand() * (hi - lo) + lo
 
 
-pyflex.init()
+pyflex.init(False)
 n_instance = 3
 n_particles = n_instance * 64
 

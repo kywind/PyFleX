@@ -49,19 +49,20 @@ struct Mesh
 
     std::vector<Point3> m_positions;
     std::vector<Vector3> m_normals;
-    std::vector<Vector2> m_texcoords[2];
-    std::vector<Colour> m_colours;
+    std::vector<Vector2> m_texcoords[2]; // mesh text uv map; 2
+    std::vector<Colour> m_colours; // vertex color
 
     std::vector<uint32_t> m_indices;    
 };
 
 // create mesh from file
+Mesh* ImportMeshFromTexObj(const char* path);
 Mesh* ImportMeshFromObj(const char* path);
 Mesh* ImportMeshFromPly(const char* path);
 Mesh* ImportMeshFromBin(const char* path);
 
 // just switches on filename
-Mesh* ImportMesh(const char* path);
+Mesh* ImportMesh(const char* path, bool texture);
 
 // save a mesh in a flat binary format
 void ExportMeshToBin(const char* path, const Mesh* m);

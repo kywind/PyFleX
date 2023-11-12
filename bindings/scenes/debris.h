@@ -51,7 +51,7 @@ public:
 
 		for (int i = 0; i < numMeshes; ++i)
 		{
-			Mesh* mesh = ImportMesh(GetFilePathByPlatform(meshes[i].file).c_str());
+			Mesh* mesh = ImportMesh(GetFilePathByPlatform(meshes[i].file).c_str(), false);
 			mesh->Normalize(meshes[i].scale);
 
 			const float spacing = radius*0.5f;

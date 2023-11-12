@@ -7,7 +7,7 @@ public:
 
 	void Initialize()
 	{
-		Mesh* level = ImportMeshFromBin(GetFilePathByPlatform("../../data/testzone.bin").c_str());		
+		Mesh* level = ImportMeshFromBin(GetFilePathByPlatform("../../data/testzone.bin").c_str(), false);		
 		level->Normalize(100.0f);
 		level->Transform(TranslationMatrix(Point3(0.0f, -5.0f, 0.0f)));
 		level->CalculateNormals();

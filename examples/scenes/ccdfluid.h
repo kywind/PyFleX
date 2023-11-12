@@ -24,7 +24,7 @@ public:
 		//Mesh* shape = ImportMesh("../../data/box.ply");
 		//shape->Transform(ScaleMatrix(Vec3(2.0f)));
 
-		Mesh* shape = ImportMesh("../../data/torus.obj");
+		Mesh* shape = ImportMesh("../../data/torus.obj", false);
 		shape->Transform(ScaleMatrix(Vec3(0.7f)));
 		
 		//Mesh* box = ImportMesh("../../data/sphere.ply");

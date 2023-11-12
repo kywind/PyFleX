@@ -109,7 +109,7 @@ def calc_surface_idx(positions):
     return surface_idx
 
 
-pyflex.init()
+pyflex.init(False)
 
 use_gpu = torch.cuda.is_available()
 
@@ -135,9 +135,10 @@ pyflex.set_scene(5, scene_params, 0)
 halfEdge = np.array([0.15, 0.8, 0.15])
 center = np.array([0., 0., 0.])
 quat = np.array([1., 0., 0., 0.])
-
-pyflex.add_box(halfEdge, center, quat)
-pyflex.add_box(halfEdge, center, quat)
+hideShape = 0
+color = np.ones(3) * 0.9
+pyflex.add_box(halfEdge, center, quat, hideShape, color)
+pyflex.add_box(halfEdge, center, quat, hideShape, color)
 
 
 ### read scene info
@@ -161,8 +162,8 @@ restPositions = np.zeros((grip_time, time_step, n_particles, dim_position))
 velocities = np.zeros((grip_time, time_step, n_particles, dim_velocity))
 shape_states = np.zeros((grip_time, time_step, n_shapes, dim_shape_state))
 
-rigid_offsets = np.zeros((grip_time, time_step, n_rigids + 1, 1), dtype=np.int)
-rigid_indices = np.zeros((grip_time, time_step, n_rigidPositions, 1), dtype=np.int)
+rigid_offsets = np.zeros((grip_time, time_step, n_rigids + 1, 1), dtype=int)
+rigid_indices = np.zeros((grip_time, time_step, n_rigidPositions, 1), dtype=int)
 rigid_localPositions = np.zeros((grip_time, time_step, n_rigidPositions, 3))
 rigid_globalPositions = np.zeros((grip_time, time_step, n_particles, 3))
 rigid_translations = np.zeros((grip_time, time_step, n_rigids, 3))
@@ -194,8 +195,8 @@ for r in range(grip_time):
 
         positions[r, i] = pyflex.get_positions().reshape(-1, dim_position)
 
-        if i == 0:
-            surface_idx = calc_surface_idx(positions[r, i, :, :3])
+        # if i == 0:
+        #     surface_idx = calc_surface_idx(positions[r, i, :, :3])
             # visualize_point_cloud(positions[i, :, :3], surface_idx)
 
         restPositions[r, i] = pyflex.get_restPositions().reshape(-1, dim_position)
@@ -226,10 +227,11 @@ for r in range(grip_time):
                           rigid_translations[r, i, j])
                 cnt += 1
 
-
+hideShape = 0
+color = np.ones(3) * 0.9
 pyflex.set_scene(5, scene_params, 0)
-pyflex.add_box(halfEdge, center, quat)
-pyflex.add_box(halfEdge, center, quat)
+pyflex.add_box(halfEdge, center, quat, hideShape, color)
+pyflex.add_box(halfEdge, center, quat, hideShape, color)
 
 for r in range(grip_time):
     for i in range(time_step):

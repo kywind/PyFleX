@@ -22,7 +22,7 @@ public:
 
 		g_numSubsteps = 3;
 
-		Mesh* bowl = ImportMesh(GetFilePathByPlatform("../../data/bowl.obj").c_str());
+		Mesh* bowl = ImportMesh(GetFilePathByPlatform("../../data/bowl.obj").c_str(), false);
 		bowl->Normalize(2.0f);
 		bowl->CalculateNormals();
 		bowl->Transform(TranslationMatrix(Point3(-1.0f, 0.0f, -1.0f)));

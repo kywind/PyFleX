@@ -51,7 +51,7 @@ public:
 
 		for (int i = 0; i < numMeshes; ++i)
 		{
-			Mesh* mesh = ImportMesh(GetFilePathByPlatform(meshes[i].file).c_str());
+			Mesh* mesh = ImportMesh(GetFilePathByPlatform(meshes[i].file).c_str(), false);
 			mesh->Normalize(meshes[i].scale);
 
 			const float spacing = radius*0.5f;
@@ -63,7 +63,7 @@ public:
 			mBatches.push_back(b);
 		}
 
-		Mesh* level = ImportMeshFromBin(GetFilePathByPlatform("../../data/testzone.bin").c_str());
+		Mesh* level = ImportMeshFromBin(GetFilePathByPlatform("../../data/testzone.bin").c_str(), false);
 		level->Transform(TranslationMatrix(Point3(-10.0f, 0.0f, 10.0f)));
 
 		NvFlexTriangleMeshId mesh = CreateTriangleMesh(level);

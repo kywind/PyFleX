@@ -1,5 +1,3 @@
-
-
 class yx_Carrots: public Scene
 {
 public:
@@ -13,7 +11,13 @@ public:
 	}
 
 
-    void Initialize(py::array_t<float> scene_params, int thread_idx = 0)
+    void Initialize(py::array_t<float> scene_params, 
+                    py::array_t<float> vertices,
+                    py::array_t<int> stretch_edges,
+                    py::array_t<int> bend_edges,
+                    py::array_t<int> shear_edges,
+                    py::array_t<int> faces,
+                    int thread_idx = 0)
     {
         auto ptr = (float *) scene_params.request().ptr;
         float max_scale = ptr[0];
@@ -36,6 +40,8 @@ public:
 		float sing_y = ptr[17];
 		float sing_z = ptr[18];
 		float add_noise_ft = ptr[19];
+		float radius = ptr[20];
+		
 		float pos_noise = pos_diff*0.5f;
 		int draw_skin = (int) draw_skin_ft;
 		int num_carrots = (int) num_carrots_ft;
@@ -46,7 +52,7 @@ public:
 		bool add_noise = (bool) add_noise_ft;
 
         // granular pile
-		float radius = 0.075f;
+		// float radius = 0.075f;
 
 		// float pos_diff = 2.0*scale;
 		int group = 0;
@@ -65,7 +71,9 @@ public:
 					}
 					float scale_r = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
 					float scale = min_scale + (max_scale-min_scale)*scale_r;
-					// void CreateParticleShape(const Mesh* srcMesh, Vec3 lower, Vec3 scale, float rotation, float spacing, Vec3 velocity, float invMass, bool rigid, float rigidStiffness, int phase, bool skin, float jitter=0.005f, Vec3 skinOffset=0.0f, float skinExpand=0.0f, Vec4 color=Vec4(0.0f), float springStiffness=0.0f)
+					// void CreateParticleShape(const Mesh* srcMesh, Vec3 lower, 
+					// Vec3 scale, float rotation, float spacing, Vec3 velocity, float invMass, bool rigid, float rigidStiffness, 
+					// int phase, bool skin, float jitter=0.005f, Vec3 skinOffset=0.0f, float skinExpand=0.0f, Vec4 color=Vec4(0.0f), float springStiffness=0.0f)
 					if (draw_skin) {
 						int num_planes = Rand(6,12);
 						Mesh* m = CreateRandomConvexMesh(num_planes, minDist, maxDist);

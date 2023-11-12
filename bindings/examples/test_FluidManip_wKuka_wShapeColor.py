@@ -41,7 +41,7 @@ camFar = 1000.
 
 pyflex.set_screenWidth(screenWidth)
 pyflex.set_screenHeight(screenHeight)
-pyflex.init()
+pyflex.init(False)
 
 
 def rand_float(lo, hi):

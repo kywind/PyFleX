@@ -23,20 +23,20 @@ def rotate_vector_2d(vector, theta):
     return np.dot(R, vector)
 
 
-def render_image_from_PyFleX(pyflex, height, width, debug_info='', draw_objects=1, draw_shadow=1):
-    while True:
-        img = pyflex.render(draw_objects=draw_objects, draw_shadow=draw_shadow)
-        img = img.reshape(height, width, 4)
-        img = img[..., :3][..., ::-1]
-        if (img != 0).any():
-            break
-        else:
-            print('empty image at %s' % debug_info)
-    return img
+# def render_image_from_PyFleX(pyflex, height, width, debug_info='', draw_objects=1, draw_shadow=1):
+#     while True:
+#         img = pyflex.render(draw_objects=draw_objects, draw_shadow=draw_shadow)
+#         img = img.reshape(height, width, 4)
+#         img = img[..., :3][..., ::-1]
+#         if (img != 0).any():
+#             break
+#         else:
+#             print('empty image at %s' % debug_info)
+#     return img
 
 
 
-pyflex.init()
+pyflex.init(False)
 
 time_step = 300
 dt = 1. / 60.
@@ -154,8 +154,8 @@ for i in range(5):
 
 
 
-des_dir = 'ClothManip'
-os.system('mkdir -p ' + des_dir)
+# des_dir = 'ClothManip'
+# os.system('mkdir -p ' + des_dir)
 
 pos_rec = np.zeros((time_step, pyflex.get_n_particles(), 3))
 
@@ -196,15 +196,15 @@ for i in range(time_step):
     else:
         action[2] = 0.
 
-    img = render_image_from_PyFleX(pyflex, height=720, width=960)
-    imgs.append(img)
+    # img = render_image_from_PyFleX(pyflex, height=720, width=960)
+    # imgs.append(img)
 
     pyflex.step(action)
 
 
 for i in range(100):
-    img = render_image_from_PyFleX(pyflex, height=720, width=960)
-    imgs.append(img)
+    # img = render_image_from_PyFleX(pyflex, height=720, width=960)
+    # imgs.append(img)
 
     action = np.zeros(4)
     pyflex.step(action)
@@ -224,8 +224,8 @@ for i in range(time_step):
     # time.sleep(0.03)
 '''
 
-fourcc = cv2.VideoWriter_fourcc(*'MJPG')
-out = cv2.VideoWriter(os.path.join(des_dir, 'out.avi'), fourcc, 40, (960, 720))
-for i in range(time_step):
-    out.write(imgs[i].astype(np.uint8))
-out.release()
+# fourcc = cv2.VideoWriter_fourcc(*'MJPG')
+# out = cv2.VideoWriter(os.path.join(des_dir, 'out.avi'), fourcc, 40, (960, 720))
+# for i in range(time_step):
+#     out.write(imgs[i].astype(np.uint8))
+# out.release()

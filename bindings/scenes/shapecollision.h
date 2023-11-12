@@ -31,7 +31,7 @@ public:
 						
 		CreateParticleGrid(Vec3(0.0f, 1.0f + dimy*maxShapeRadius*2.0f, 0.0f), 30, 50, 30, radius, Vec3(0.0f), 1.0f, false, 0.0f, phase, 0.0f);
 
-		Mesh* box = ImportMesh(GetFilePathByPlatform("../../data/box.ply").c_str());
+		Mesh* box = ImportMesh(GetFilePathByPlatform("../../data/box.ply").c_str(), false);
 		box->Normalize(1.0f);
 
 		NvFlexTriangleMeshId mesh = CreateTriangleMesh(box);

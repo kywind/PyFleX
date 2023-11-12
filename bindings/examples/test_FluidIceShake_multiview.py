@@ -92,7 +92,7 @@ def calc_shape_states(x_curr, x_last, box_dis):
 
 pyflex.set_screenWidth(screenWidth)
 pyflex.set_screenHeight(screenHeight)
-pyflex.init()
+pyflex.init(False)
 
 use_gpu = torch.cuda.is_available()
 
@@ -154,12 +154,12 @@ print("scene_params", scene_params)
 pyflex.set_scene(8, scene_params, 0)
 
 # front view
-pyflex.set_camPos(np.array([0.1, 1.25, 3.]))
-pyflex.set_camAngle(np.array([0., -0.2617994, 0.]))
+# pyflex.set_camPos(np.array([0.1, 1.25, 3.]))
+# pyflex.set_camAngle(np.array([0., -0.2617994, 0.]))
 
 # left view
-# pyflex.set_camPos(np.array([-1.4, 1.25, 1.5 * np.sqrt(3)]))
-# pyflex.set_camAngle(np.array([-np.radians(30.), -0.2617994, 0.]))
+pyflex.set_camPos(np.array([-1.4, 1.25, 1.5 * np.sqrt(3)]))
+pyflex.set_camAngle(np.array([-np.radians(30.), -0.2617994, 0.]))
 
 # right view
 # pyflex.set_camPos(np.array([1.6, 1.25, 1.5 * np.sqrt(3)]))
@@ -180,7 +180,9 @@ for i in range(len(boxes)):
     halfEdge = boxes[i][0]
     center = boxes[i][1]
     quat = boxes[i][2]
-    pyflex.add_box(halfEdge, center, quat)
+    hideShape = 0
+    color = np.ones(3) * 0.9
+    pyflex.add_box(halfEdge, center, quat, hideShape, color)
 
 pyflex.set_hideShapes(np.array([1, 1, 1, 1, 1]))
 
@@ -223,13 +225,15 @@ for i in range(time_step):
         print(x_box, box_dis_x, box_dis_z)
 
     if i == 0:
-        pyflex.render(capture=True, draw_objects=0, path=os.path.join(des_dir, 'bg.tga'))
+        # pyflex.render(capture=True, draw_objects=0, path=os.path.join(des_dir, 'bg.tga'))
+        pyflex.render()
         pyflex.step()
     else:
         store_data(['positions', 'velocities'], [positions[i, :, :3], velocities[i, :, :3]],
                    path=os.path.join(des_dir, 'info_%d.h5' % (i - 1)))
-        pyflex.render(capture=True, draw_shadow=1, path=os.path.join(des_dir, 'step_%d.tga' % (i - 1)))
-        pyflex.render(capture=True, draw_shadow=0, path=os.path.join(des_dir, 'step_noShadow_%d.tga' % (i - 1)))
+        # pyflex.render(capture=True, draw_shadow=1, path=os.path.join(des_dir, 'step_%d.tga' % (i - 1)))
+        # pyflex.render(capture=True, draw_shadow=0, path=os.path.join(des_dir, 'step_noShadow_%d.tga' % (i - 1)))
+        pyflex.render()
         pyflex.step(draw_shadow=0)
 
 

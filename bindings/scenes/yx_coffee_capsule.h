@@ -30,14 +30,14 @@ public:
         float cap_y = ptr[10];
         float cap_z = ptr[11];
 		float num_capsules_ft = ptr[12];
-		float cap_slices_ft = ptr[13];
-		float cap_segments_ft = ptr[14];
+		// float cap_slices_ft = ptr[13];
+		// float cap_segments_ft = ptr[14];
 
 		int draw_skin = (int) draw_skin_ft;
 		int num_coffee = (int) num_coffee_ft;
 		int num_capsules = (int) num_capsules_ft;
-		int cap_slices = (int) cap_slices_ft;
-		int cap_segments = (int) cap_segments_ft;
+		// int cap_slices = (int) cap_slices_ft;
+		// int cap_segments = (int) cap_segments_ft;
 
         // granular pile
 		float radius = 0.075f;

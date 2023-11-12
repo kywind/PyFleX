@@ -38,7 +38,17 @@ public:
 
 	Scene(const char* name) : mName(name) {}
 	
-	virtual void Initialize(py::array_t<float> scene_params, int thread_idx = 0) = 0;
+	// virtual void Initialize(py::array_t<float> scene_params, int thread_idx = 0) = 0;
+
+	virtual void Initialize(
+				py::array_t<float> scene_params, 
+				py::array_t<float> vertices,
+				py::array_t<int> stretch_edges,
+				py::array_t<int> bend_edges,
+				py::array_t<int> shear_edges,
+				py::array_t<int> faces, 
+				int thread_idx = 0){};
+
 	virtual void PostInitialize() {}
 	
 	// update any buffers (all guaranteed to be mapped here)
@@ -60,69 +70,78 @@ public:
 };
 
 
-#include "scenes/yz_bunnybath.h"
+#include "scenes/yz_bunnybath.h" 
 #include "scenes/yz_boxbath.h"
 #include "scenes/yz_boxbathext.h"
 #include "scenes/yz_dambreak.h"
 #include "scenes/yz_rigidfall.h"
-#include "scenes/yz_ricefall.h"
+#include "scenes/yz_ricefall.h" //5
 #include "scenes/yz_softbody.h"
 #include "scenes/yz_fluidshake.h"
 #include "scenes/yz_fluidiceshake.h"
 #include "scenes/yz_massrope.h"
-#include "scenes/yz_flag.h"
+#include "scenes/yz_flag.h" //10
 #include "scenes/yz_softrod.h"
 #include "scenes/yz_clothrigid.h"
 #include "scenes/yz_granular.h"
 #include "scenes/yz_bunnygrip.h"
-#include "scenes/yz_clothmanip.h"
+#include "scenes/yz_clothmanip.h" //15
 #include "scenes/yz_softfall.h"
 #include "scenes/yz_fluidpour.h"
 #include "scenes/yz_granularmanip.h"
 #include "scenes/yz_fluid_and_box.h"
 
-#include "scenes/yx_coffee.h"
-#include "scenes/yx_capsule.h"
-#include "scenes/yx_carrots.h"
-#include "scenes/yx_coffee_capsule.h"
+#include "scenes/yx_coffee.h" //20
+#include "scenes/yx_capsule.h" //21
+#include "scenes/yx_carrots.h" //22
+#include "scenes/yx_coffee_capsule.h" //23
+
+#include "scenes/by_apple.h" //24
+#include "scenes/by_singleycb.h" //25
+#include "scenes/by_softrope.h" //26
+#include "scenes/by_cloth.h" //27
+#include "scenes/by_multiycb.h" //28
+#include "scenes/by_softgym_cloth.h" //29
+#include "scenes/softgym_cloth_2.h" //30
+
+#include "scenes/by_roperigid.h" //31
+#include "scenes/by_rigidgranular.h" //32
 
 #include "scenes/adhesion.h"
-#include "scenes/armadilloshower.h"
+#include "scenes/armadilloshower.h" 
 #include "scenes/bananas.h"
 #include "scenes/bouyancy.h"
 #include "scenes/bunnybath.h"
 #include "scenes/ccdfluid.h"
-#include "scenes/clothlayers.h"
+#include "scenes/clothlayers.h" 
 #include "scenes/dambreak.h"
 #include "scenes/darts.h"
 #include "scenes/debris.h"
 #include "scenes/deformables.h"
-#include "scenes/envcloth.h"
-#include "scenes/flag.h"
 #include "scenes/fluidblock.h"
 #include "scenes/fluidclothcoupling.h"
 #include "scenes/forcefield.h"
-#include "scenes/frictionmoving.h"
+#include "scenes/frictionmoving.h" 
 #include "scenes/frictionramp.h"
 #include "scenes/gamemesh.h"
 #include "scenes/googun.h"
 #include "scenes/granularpile.h"
-#include "scenes/granularshape.h"
+#include "scenes/granularshape.h" 
 #include "scenes/inflatable.h"
 #include "scenes/initialoverlap.h"
 #include "scenes/lighthouse.h"
 #include "scenes/localspacecloth.h"
-#include "scenes/localspacefluid.h"
+#include "scenes/localspacefluid.h" 
 #include "scenes/lowdimensionalshapes.h"
 #include "scenes/melting.h"
 #include "scenes/mixedpile.h"
 #include "scenes/nonconvex.h"
-#include "scenes/parachutingbunnies.h"
+#include "scenes/parachutingbunnies.h" 
 #include "scenes/pasta.h"
 #include "scenes/player.h"
 #include "scenes/potpourri.h"
 #include "scenes/rayleightaylor.h"
-#include "scenes/restitution.h"
+#include "scenes/restitution.h" 
 #include "scenes/rigidfluidcoupling.h"
 #include "scenes/rigidpile.h"
 #include "scenes/rigidrotation.h"
@@ -137,5 +156,5 @@ public:
 #include "scenes/thinbox.h"
 #include "scenes/trianglecollision.h"
 #include "scenes/triggervolume.h"
-#include "scenes/viscosity.h"
+#include "scenes/viscosity.h" 
 #include "scenes/waterballoon.h"

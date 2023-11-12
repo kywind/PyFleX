@@ -10,7 +10,7 @@ public:
 		float radius = 0.1f;
 		int group = 0;
 
-		Mesh* mesh = ImportMesh(GetFilePathByPlatform("../../data/box.ply").c_str());
+		Mesh* mesh = ImportMesh(GetFilePathByPlatform("../../data/box.ply").c_str(), false);
 
 		CreateParticleShape(mesh, Vec3(0.0f, 1.0f, 0.0f), Vec3(1.2f, 0.001f, 1.2f), 0.0f, radius, Vec3(0.0f, 0.0f, 0.0f), 1.0f, true, 1.0f, NvFlexMakePhase(group++, 0), true, 0.0f);
 

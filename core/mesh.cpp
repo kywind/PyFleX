@@ -131,7 +131,7 @@ namespace
 } // namespace anonymous
 
 
-Mesh* ImportMesh(const char* path)
+Mesh* ImportMesh(const char* path, bool texture)
 {
 	std::string ext = GetExtension(path);
 
@@ -139,9 +139,10 @@ Mesh* ImportMesh(const char* path)
 
 	if (ext == "ply")
 		mesh = ImportMeshFromPly(path);
-	else if (ext == "obj")
+	else if ((ext == "obj") && texture)
+		mesh = ImportMeshFromTexObj(path);
+	else if ((ext == "obj") && !texture)
 		mesh = ImportMeshFromObj(path);
-
 
 	return mesh;
 }
@@ -391,12 +392,14 @@ struct VertexKey
 };
 
 // read RGB value of a material (e.g. blue, white) from a MTL file
-Colour readMtl(std::string path, std::string mtl_name) {
+// Colour readMtl(std::string path, std::string mtl_name)
+Colour readMtl(std::string path) {
 	ifstream file(path);
 	if (!file.is_open()) {
 		// printf("Could not open file %s\n", path.c_str());
 		return Colour(1.0f, 1.0f, 1.0f, 1.0f);
 	}
+	
 	while (file) {
 		std::string line;
 		std::getline(file, line);
@@ -406,18 +409,19 @@ Colour readMtl(std::string path, std::string mtl_name) {
 		if (type == "newmtl") {
 			std::string name;
 			ss >> name;
-			if (name == mtl_name) {
-				while (file) {
-					std::string line;
-					std::getline(file, line);
-					std::stringstream ss(line);
-					std::string type;
-					ss >> type;
-					if (type == "Kd") {
-						float r, g, b;
-						ss >> r >> g >> b;
-						return Colour(r, g, b, 1.0f);
-					}
+			while (file) {
+				std::string line;
+				std::getline(file, line);
+				std::stringstream ss(line);
+				std::string type;
+				ss >> type;
+				cout << type << endl;
+				if (type == "Kd") {
+					float r, g, b;
+					ss >> r >> g >> b;
+					// cout << r << g << b << endl;
+					cout << " texture Kd color" << Colour(r, g, b, 1.0f) << endl;
+					return Colour(r, g, b, 1.0f);
 				}
 			}
 		}
@@ -431,6 +435,8 @@ Mesh* ImportMeshFromObj(const char* path)
     ifstream file(path);
 	std::string obj_path = std::string(path);
 	std::string mtl_path = obj_path.substr(0, obj_path.find_last_of(".")) + ".mtl";
+	// cout << obj_path << endl;
+	// cout << mtl_path << endl;
 
     if (!file)
         return NULL;
@@ -476,10 +482,9 @@ Mesh* ImportMeshFromObj(const char* path)
         }
         else if (buffer[0] == 'v')
         {
-            // positions
+            // vertex positions
             float x, y, z;
-            file >> x >> y >> z;
-
+			file >> x >> y >> z;
             positions.push_back(Point3(x, y, z));
         }
         else if (buffer[0] == 's' || buffer[0] == 'g' || buffer[0] == 'o')
@@ -499,9 +504,9 @@ Mesh* ImportMeshFromObj(const char* path)
             // read Material name
             std::string materialName;
             file >> materialName;
-			curr_colour = readMtl(mtl_path, materialName);
+			curr_colour = readMtl(mtl_path);
         }
-        else if (buffer[0] == 'f')
+		else if (buffer[0] == 'f')
         {
             // faces
             uint32_t faceIndices[4];
@@ -555,11 +560,8 @@ Mesh* ImportMeshFromObj(const char* path)
 
 						// push back vertex data
 						assert(key.v > 0);
-
 						m->m_positions.push_back(positions[key.v-1]);
-						
-						// obj format doesn't support mesh colours so add default value
-						// m->m_colours.push_back(Colour(1.0f, 1.0f, 1.0f));
+
 						m->m_colours.push_back(curr_colour);
 
 						// normal [optional]
@@ -569,6 +571,221 @@ Mesh* ImportMeshFromObj(const char* path)
 						}
 
 						// texcoord [optional]
+						// vt: uv coordinate
+						if (key.vt)
+						{
+							m->m_texcoords[0].push_back(texcoords[key.vt-1]);
+						}
+					}
+				}
+            }
+
+            if (faceIndexCount == 3)
+            {
+                // a triangle
+                indices.insert(indices.end(), faceIndices, faceIndices+3);
+            }
+            else if (faceIndexCount == 4)
+            {
+                // a quad, triangulate clockwise
+                indices.insert(indices.end(), faceIndices, faceIndices+3);
+
+                indices.push_back(faceIndices[2]);
+                indices.push_back(faceIndices[3]);
+                indices.push_back(faceIndices[0]);
+            }
+            else
+            {
+                cout << "Face with more than 4 vertices are not supported" << endl;
+            }
+
+        }		
+        else if (buffer[0] == '#')
+        {
+            // comment
+            char linebuf[256];
+            file.getline(linebuf, 256);
+        }
+    }
+
+    // calculate normals if none specified in file
+    m->m_normals.resize(m->m_positions.size());
+
+    const uint32_t numFaces = uint32_t(indices.size())/3;
+    for (uint32_t i=0; i < numFaces; ++i)
+    {
+        uint32_t a = indices[i*3+0];
+        uint32_t b = indices[i*3+1];
+        uint32_t c = indices[i*3+2];
+
+        Point3& v0 = m->m_positions[a];
+        Point3& v1 = m->m_positions[b];
+        Point3& v2 = m->m_positions[c];
+
+        Vector3 n = SafeNormalize(Cross(v1-v0, v2-v0), Vector3(0.0f, 1.0f, 0.0f));
+
+        m->m_normals[a] += n;
+        m->m_normals[b] += n;
+        m->m_normals[c] += n;
+    }
+
+    for (uint32_t i=0; i < m->m_normals.size(); ++i)
+    {
+        m->m_normals[i] = SafeNormalize(m->m_normals[i], Vector3(0.0f, 1.0f, 0.0f));
+    }
+        
+    //cout << "Imported mesh " << path << " in " << (GetSeconds()-startTime)*1000.f << "ms" << endl;
+
+    return m;
+}
+
+Mesh* ImportMeshFromTexObj(const char* path)
+{
+    ifstream file(path);
+	std::string obj_path = std::string(path);
+	std::string mtl_path = obj_path.substr(0, obj_path.find_last_of(".")) + ".mtl";
+
+    if (!file)
+        return NULL;
+
+    Mesh* m = new Mesh();
+
+    vector<Point3> positions;
+    vector<Vector3> normals;
+    vector<Vector2> texcoords;
+    vector<Vector3> colors;
+    vector<uint32_t>& indices = m->m_indices;
+	Colour curr_colour = Colour(1.0f, 1.0f, 1.0f, 1.0f);
+
+    //typedef unordered_map<VertexKey, uint32_t, MemoryHash<VertexKey> > VertexMap;
+    typedef map<VertexKey, uint32_t> VertexMap;
+    VertexMap vertexLookup;	
+
+    // some scratch memory
+    const uint32_t kMaxLineLength = 1024;
+    char buffer[kMaxLineLength];
+
+    //double startTime = GetSeconds();
+
+    while (file)
+    {
+        file >> buffer;
+	
+        if (strcmp(buffer, "vn") == 0)
+        {
+            // normals
+            float x, y, z;
+            file >> x >> y >> z;
+
+            normals.push_back(Vector3(x, y, z));
+        }
+        else if (strcmp(buffer, "vt") == 0)
+        {
+            // texture coords
+            float u, v;
+            file >> u >> v;
+
+            texcoords.push_back(Vector2(u, v));
+        }
+
+        else if (buffer[0] == 'v')
+        {
+            // vertex positions
+            float x, y, z;
+			float r, g, b;
+            
+			file >> x >> y >> z >> r >> g >> b;
+
+            positions.push_back(Point3(x, y, z));
+			colors.push_back(Vec3(r, g, b));
+        }
+
+        else if (buffer[0] == 's' || buffer[0] == 'g' || buffer[0] == 'o')
+        {
+            // ignore smoothing groups, groups and objects
+            char linebuf[256];
+            file.getline(linebuf, 256);		
+        }
+        else if (strcmp(buffer, "mtllib") == 0)
+        {
+            // ignored
+            std::string MaterialFile;
+            file >> MaterialFile;
+        }		
+        else if (strcmp(buffer, "usemtl") == 0)
+        {
+            // read Material name
+            std::string materialName;
+            file >> materialName;
+			curr_colour = readMtl(mtl_path);
+        }
+		else if (buffer[0] == 'f')
+        {
+            // faces
+            uint32_t faceIndices[4];
+            uint32_t faceIndexCount = 0;
+
+            for (int i=0; i < 4; ++i)
+            {
+                VertexKey key;
+
+                file >> key.v;
+
+				if (!file.eof())
+				{
+					// failed to read another index continue on
+					if (file.fail())
+					{
+						file.clear();
+						break;
+					}
+
+					if (file.peek() == '/')
+					{
+						file.ignore();
+
+						if (file.peek() != '/')
+						{
+							file >> key.vt;
+						}
+
+						if (file.peek() == '/')
+						{
+							file.ignore();
+							file >> key.vn;
+						}
+					}
+
+					// find / add vertex, index
+					VertexMap::iterator iter = vertexLookup.find(key);
+
+					if (iter != vertexLookup.end())
+					{
+						faceIndices[faceIndexCount++] = iter->second;
+					}
+					else
+					{
+						// add vertex
+						uint32_t newIndex = uint32_t(m->m_positions.size());
+						faceIndices[faceIndexCount++] = newIndex;
+
+						vertexLookup.insert(make_pair(key, newIndex)); 	
+
+						// push back vertex data
+						assert(key.v > 0);
+						m->m_positions.push_back(positions[key.v-1]);
+						m->m_colours.push_back(Colour(colors[key.v-1]));
+
+						// m->m_colours.push_back(curr_colour);
+
+						// normal [optional]
+						if (key.vn)
+						{
+							m->m_normals.push_back(normals[key.vn-1]);
+						}
+
+						// texcoord [optional]
+						// vt: uv coordinate
 						if (key.vt)
 						{
 							m->m_texcoords[0].push_back(texcoords[key.vt-1]);

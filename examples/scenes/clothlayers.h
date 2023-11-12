@@ -28,7 +28,7 @@ public:
 		Vec3 lower, upper;
 		GetParticleBounds(lower, upper);
 
-		Mesh* sphere = ImportMesh(GetFilePathByPlatform("../../data/sphere.ply").c_str());
+		Mesh* sphere = ImportMesh(GetFilePathByPlatform("../../data/sphere.ply").c_str(), false);
 		sphere->Normalize();
 
 		NvFlexTriangleMeshId mesh = CreateTriangleMesh(sphere);

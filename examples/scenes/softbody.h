@@ -179,7 +179,7 @@ public:
 	{
 		RenderingInstance renderingInstance;
 
-		Mesh* mesh = ImportMesh(GetFilePathByPlatform(instance.mFile).c_str());
+		Mesh* mesh = ImportMesh(GetFilePathByPlatform(instance.mFile).c_str(), false);
 		mesh->Normalize();
 		mesh->Transform(TranslationMatrix(Point3(instance.mTranslation))*ScaleMatrix(instance.mScale*mRadius));
 

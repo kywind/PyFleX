@@ -21,7 +21,14 @@ public:
 	    *b = tmp;
 	}
 
-	void Initialize(py::array_t<float> scene_params, int thread_idx = 0)
+	// void Initialize(py::array_t<float> scene_params, int thread_idx = 0)
+	void Initialize(py::array_t<float> scene_params, 
+                    py::array_t<float> vertices,
+                    py::array_t<int> stretch_edges,
+                    py::array_t<int> bend_edges,
+                    py::array_t<int> shear_edges,
+                    py::array_t<int> faces,
+                    int thread_idx = 0)
 	{
 		float radius = 0.1f;
 

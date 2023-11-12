@@ -5,7 +5,7 @@ public:
 
 	Pasta(const char* name) : Scene(name) {}
 
-	virtual void Initialize()
+	void Initialize()
 	{
 		float radius = 0.1f;
 		float length = 15.0f;
@@ -16,13 +16,14 @@ public:
 			float theta = k2Pi*float(i) / n;
 
 			Rope r;
-			CreateRope(r, 0.5f*Vec3(cosf(theta), 2.0f, sinf(theta)), Vec3(0.0f, 1.0f, 0.0f), 0.25f, int(length / radius), length, NvFlexMakePhase(0, eNvFlexPhaseSelfCollide));
+			CreateRope(r, 0.5f*Vec3(cosf(theta), 2.0f, sinf(theta)), Vec3(0.0f, 1.0f, 0.0f), 
+						0.25f, int(length / radius), length, NvFlexMakePhase(0, eNvFlexPhaseSelfCollide));
 			g_ropes.push_back(r);
 		}
 
 		g_numSubsteps = 3;
 
-		Mesh* bowl = ImportMesh(GetFilePathByPlatform("../../data/bowl.obj").c_str());
+		Mesh* bowl = ImportMesh(GetFilePathByPlatform("../../data/bowl.obj").c_str(), false);
 		bowl->Normalize(2.0f);
 		bowl->CalculateNormals();
 		bowl->Transform(TranslationMatrix(Point3(-1.0f, 0.0f, -1.0f)));

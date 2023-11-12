@@ -12,7 +12,7 @@ public:
 
 	void Initialize()
 	{
-		Mesh* mesh = ImportMesh(GetFilePathByPlatform("../../data/irregular_plane.obj").c_str());
+		Mesh* mesh = ImportMesh(GetFilePathByPlatform("../../data/irregular_plane.obj").c_str(), false);
 		mesh->Transform(RotationMatrix(kPi, Vec3(0.0f, 1.0f, 0.0f))*RotationMatrix(kPi*0.5f, Vec3(1.0f, 0.0f, 0.0f))*ScaleMatrix(2.0f));
 
 		Vec3 lower, upper;

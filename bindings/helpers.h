@@ -150,8 +150,10 @@ void CreateSpring(int i, int j, float stiffness, float give=0.0f)
 	g_buffers->springStiffness.push_back(stiffness);	
 }
 
-
-void CreateParticleShape(const Mesh* srcMesh, Vec3 lower, Vec3 scale, float rotation, float spacing, Vec3 velocity, float invMass, bool rigid, float rigidStiffness, int phase, bool skin, float jitter=0.005f, Vec3 skinOffset=0.0f, float skinExpand=0.0f, Vec4 color=Vec4(0.0f), float springStiffness=0.0f)
+// modified by Yixuan
+void CreateParticleShape(const Mesh* srcMesh, Vec3 lower, Vec3 scale, float rotation, float spacing, Vec3 velocity, 
+						float invMass, bool rigid, float rigidStiffness, int phase, bool skin, float jitter=0.005f, 
+						Vec3 skinOffset=0.0f, float skinExpand=0.0f, Vec4 color=Vec4(0.0f), float springStiffness=0.0f)
 {
 	if (rigid && g_buffers->rigidIndices.empty())
 		g_buffers->rigidOffsets.push_back(0);
@@ -334,12 +336,6 @@ void CreateParticleShape(const Mesh* srcMesh, Vec3 lower, Vec3 scale, float rota
 				g_mesh->m_colours.resize(g_mesh->GetNumVertices());
 			}
 			if (LengthSq(color) == 0.0f)
-				// g_mesh->m_colours[i] = 1.25f*colors[((unsigned int)(phase))%7];
-				// if (i > 200) {
-				// 	g_mesh->m_colours[i] = Colour(1.0f, 1.0f, 1.0f);
-				// } else {
-				// 	g_mesh->m_colours[i] = Colour(0.0f, 0.0f, 1.0f);
-				// }
 				g_mesh->m_colours[i] = mesh.m_colours[i-startVertex];
 			else
 				g_mesh->m_colours[i] = Colour(color);
@@ -401,9 +397,9 @@ void CreateParticleShape(const Mesh* srcMesh, Vec3 lower, Vec3 scale, float rota
 }
 
 // wrapper to create shape from a filename
-void CreateParticleShape(const char* filename, Vec3 lower, Vec3 scale, float rotation, float spacing, Vec3 velocity, float invMass, bool rigid, float rigidStiffness, int phase, bool skin, float jitter=0.005f, Vec3 skinOffset=0.0f, float skinExpand=0.0f, Vec4 color=Vec4(0.0f), float springStiffness=0.0f)
+void CreateParticleShape(const char* filename, Vec3 lower, Vec3 scale, float rotation, float spacing, Vec3 velocity, float invMass, bool rigid, float rigidStiffness, int phase, bool skin, float jitter=0.005f, Vec3 skinOffset=0.0f, float skinExpand=0.0f, Vec4 color=Vec4(0.0f), float springStiffness=0.0f, bool texture=false)
 {
-	Mesh* mesh = ImportMesh(filename);
+	Mesh* mesh = ImportMesh(filename, texture);
 	if (mesh)
 		CreateParticleShape(mesh, lower, scale, rotation, spacing, velocity, invMass, rigid, rigidStiffness, phase, skin, jitter, skinOffset, skinExpand, color, springStiffness);
 	
@@ -760,9 +756,9 @@ void AddTriangleMesh(NvFlexTriangleMeshId mesh, Vec3 translation, Quat rotation,
 	g_buffers->shapeFlags.push_back(NvFlexMakeShapeFlags(eNvFlexShapeTriangleMesh, false));
 }
 
-NvFlexDistanceFieldId CreateSDF(const char* meshFile, int dim, float margin = 0.1f, float expand = 0.0f)
+NvFlexDistanceFieldId CreateSDF(const char* meshFile, int dim, float margin = 0.1f, float expand = 0.0f, bool texture=false)
 {
-	Mesh* mesh = ImportMesh(meshFile);
+	Mesh* mesh = ImportMesh(meshFile, texture);
 
 	// include small margin to ensure valid gradients near the boundary
 	mesh->Normalize(1.0f - margin);
@@ -2161,6 +2157,7 @@ void GetShapeBounds(Vec3& totalLower, Vec3& totalUpper)
 	totalUpper = totalBounds.upper;
 }
 
+// written by Yixuan
 Mesh* CreateRandomConvexMesh(int numPlanes, float minDist, float maxDist) {
 	Mesh* mesh = new Mesh();
 

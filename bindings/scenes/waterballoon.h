@@ -94,7 +94,7 @@ public:
 
 
 		// add inflatables
-		Mesh* mesh = ImportMesh(GetFilePathByPlatform("../../data/sphere_high.ply").c_str());
+		Mesh* mesh = ImportMesh(GetFilePathByPlatform("../../data/sphere_high.ply").c_str(), false);
 
 		for (int y = 0; y < 2; ++y)
 			for (int i = 0; i < 2; ++i)

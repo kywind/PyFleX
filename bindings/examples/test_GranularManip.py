@@ -27,7 +27,7 @@ screenHeight = 720
 
 pyflex.set_screenWidth(screenWidth)
 pyflex.set_screenHeight(screenHeight)
-pyflex.init()
+pyflex.init(False)
 
 
 

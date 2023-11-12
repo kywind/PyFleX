@@ -12,7 +12,7 @@ def rand_int(lo, hi):
     return np.random.randint(lo, hi)
 
 
-pyflex.init()
+pyflex.init(False)
 
 dt = 1. / 60.
 action_scale = 0.15 * dt
@@ -24,7 +24,7 @@ trans = [0., 0.1, 0.]       # x, y, z
 
 stiffness = 0.03 + (y - 4) * 0.04
 cluster = [2.0, 2.0, stiffness]    # spacing, radius, stiffness
-draw_mesh = 0
+draw_mesh = 1
 
 scene_params = np.array(scale + trans + cluster + [draw_mesh])
 

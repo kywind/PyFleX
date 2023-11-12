@@ -391,9 +391,9 @@ void CreateParticleShape(const Mesh* srcMesh, Vec3 lower, Vec3 scale, float rota
 }
 
 // wrapper to create shape from a filename
-void CreateParticleShape(const char* filename, Vec3 lower, Vec3 scale, float rotation, float spacing, Vec3 velocity, float invMass, bool rigid, float rigidStiffness, int phase, bool skin, float jitter=0.005f, Vec3 skinOffset=0.0f, float skinExpand=0.0f, Vec4 color=Vec4(0.0f), float springStiffness=0.0f)
+void CreateParticleShape(const char* filename, Vec3 lower, Vec3 scale, float rotation, float spacing, Vec3 velocity, float invMass, bool rigid, float rigidStiffness, int phase, bool skin, float jitter=0.005f, Vec3 skinOffset=0.0f, float skinExpand=0.0f, Vec4 color=Vec4(0.0f), float springStiffness=0.0f, bool texture=false)
 {
-	Mesh* mesh = ImportMesh(filename);
+	Mesh* mesh = ImportMesh(filename, texture);
 	if (mesh)
 		CreateParticleShape(mesh, lower, scale, rotation, spacing, velocity, invMass, rigid, rigidStiffness, phase, skin, jitter, skinOffset, skinExpand, color, springStiffness);
 	
@@ -750,9 +750,9 @@ void AddTriangleMesh(NvFlexTriangleMeshId mesh, Vec3 translation, Quat rotation,
 	g_buffers->shapeFlags.push_back(NvFlexMakeShapeFlags(eNvFlexShapeTriangleMesh, false));
 }
 
-NvFlexDistanceFieldId CreateSDF(const char* meshFile, int dim, float margin = 0.1f, float expand = 0.0f)
+NvFlexDistanceFieldId CreateSDF(const char* meshFile, int dim, float margin = 0.1f, float expand = 0.0f, bool texture = false)
 {
-	Mesh* mesh = ImportMesh(meshFile);
+	Mesh* mesh = ImportMesh(meshFile, texture);
 
 	// include small margin to ensure valid gradients near the boundary
 	mesh->Normalize(1.0f - margin);

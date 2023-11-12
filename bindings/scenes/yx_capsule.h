@@ -13,7 +13,13 @@ public:
 	}
 
 
-    void Initialize(py::array_t<float> scene_params, int thread_idx = 0)
+    void Initialize(py::array_t<float> scene_params, 
+                    py::array_t<float> vertices,
+                    py::array_t<int> stretch_edges,
+                    py::array_t<int> bend_edges,
+                    py::array_t<int> shear_edges,
+                    py::array_t<int> faces,
+                    int thread_idx = 0)
     {
         auto ptr = (float *) scene_params.request().ptr;
         float scale = ptr[0];
@@ -26,6 +32,7 @@ public:
 		float num_capsules_ft = ptr[7];
 		float slices_ft = ptr[8];
 		float segments_ft = ptr[9];
+		
 		int draw_skin = (int) draw_skin_ft;
 		int num_capsules = (int) num_capsules_ft;
 		int slices = (int) slices_ft;

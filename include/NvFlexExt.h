@@ -128,6 +128,8 @@ struct NvFlexVector
 	T& operator[](int index)
 	{
 		assert(mappedPtr);
+		// std::cout << "index: " << index << std::endl;
+		// std::cout << "count: " << count << std::endl;
 		assert(index < count);
 
 		return mappedPtr[index];
