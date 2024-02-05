@@ -10,7 +10,7 @@ pyflex.init(headless=False)
 # scene idx and params
 scene_idx = 0
 scene_params = np.array([])
-pyflex.set_scene(scene_idx, scene_params, 0)
+pyflex.set_scene(scene_idx, scene_params, thread_idx=0)
 
 # get scene bounds
 print("Scene Upper:", pyflex.get_scene_upper())
