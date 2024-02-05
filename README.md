@@ -1,5 +1,6 @@
-# install PyFleX
+# PyFleX
 
+## Install
 ```
 # ensure docker-ce is installed (https://docs.docker.com/engine/install/ubuntu/)
 # ensure nvidia-docker is installed. This is by:
@@ -35,12 +36,12 @@ echo '' >> ~/.bashrc
 # finally, restart the terminal
 ```
 
-# Run Examples
+## Run Examples
 ```
 python examples/test_BoxBath.py
 ```
 
-# Scenes
+## Scenes
 **NOTE: Not all scenes are supported yet. (I'm working on this now.) Check example python files under ```examples/``` for supported scenes!**
 ```
 # Example usage
