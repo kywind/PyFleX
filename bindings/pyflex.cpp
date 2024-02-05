@@ -3023,14 +3023,25 @@ void pyflex_add_capsule(py::array_t<float> params, py::array_t<float> lower_pos,
     pyflex_UnmapShapeBuffers(g_buffers);
 }
 
-void pyflex_add_mesh(const char *s, float scaling, int hideShape, py::array_t<float> color, bool texture=false) {
+void pyflex_add_mesh(const char *s, float scaling, int hideShape, py::array_t<float> color, 
+                    py::array_t<float> translation, py::array_t<float> rotation, bool texture=false) 
+{
     Mesh* m = ImportMesh(s, texture);
     m->Transform(ScaleMatrix(Vec3(scaling)));
 
     NvFlexTriangleMeshId mesh = CreateTriangleMesh(m);
 
+    // record translation
+    auto ptr_translation = (float *) translation.request().ptr;
+    Vec3 translation_ = Vec3(ptr_translation[0], ptr_translation[1], ptr_translation[2]);
+
+    //record rotation
+    auto ptr_rotation = (float *) rotation.request().ptr;
+    Quat rotation_ = Quat(ptr_rotation[0], ptr_rotation[1], ptr_rotation[2], ptr_rotation[3]);
+
+    // add triangle mesh
     pyflex_MapShapeBuffers(g_buffers);
-    AddTriangleMesh(mesh, Vec3(), Quat(), 1.0f);
+    AddTriangleMesh(mesh, translation_, rotation_, 1.0f);
     pyflex_UnmapShapeBuffers(g_buffers);
 
     // record hideShape
@@ -3039,6 +3050,20 @@ void pyflex_add_mesh(const char *s, float scaling, int hideShape, py::array_t<fl
     // record shape color
     auto ptr = (float *) color.request().ptr;
     g_shapeColors.push_back(Vec3(ptr[0], ptr[1], ptr[2]));
+}
+
+void pyflex_add_sphere(float radius, py::array_t<float> position_, py::array_t<float> quat_) {
+    pyflex_MapShapeBuffers(g_buffers);
+
+    auto ptr_center = (float *) position_.request().ptr;
+    Vec3 center = Vec3(ptr_center[0], ptr_center[1], ptr_center[2]);
+
+    auto ptr_quat = (float *) quat_.request().ptr;
+    Quat quat = Quat(ptr_quat[0], ptr_quat[1], ptr_quat[2], ptr_quat[3]);
+
+    AddSphere(radius, center, quat);
+
+    pyflex_UnmapShapeBuffers(g_buffers);
 }
 
 int pyflex_get_n_particles() {

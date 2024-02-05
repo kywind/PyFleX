@@ -1308,7 +1308,8 @@ void CreateSpringGrid(Vec3 lower, int dx, int dy, int dz, float radius, int phas
 	}	
 }
 
-void CreateRope(Rope& rope, Vec3 start, Vec3 dir, float stiffness, int segments, float length, int phase, float spiralAngle=0.0f, float invmass=1.0f, float give=0.075f)
+void CreateRope(Rope& rope, Vec3 start, Vec3 dir, float stiffness, int segments, float length, int phase, float spiralAngle=0.0f, float invmass=1.0f, 
+	float give=0.075f, float bendingStiffness=0.8)
 {
 	rope.mIndices.push_back(int(g_buffers->positions.size()));
 
@@ -1356,8 +1357,10 @@ void CreateRope(Rope& rope, Vec3 start, Vec3 dir, float stiffness, int segments,
 			//CreateSpring(prev-3, prev+1, -0.25f);
 		
 		// bending spring
-		if (i > 0)
-			CreateSpring(prev-1, prev+1, stiffness*0.5f, give);
+		if (i > 0) {
+			// CreateSpring(prev-1, prev+1, stiffness*0.5f, give);
+			CreateSpring(prev-1, prev+1, bendingStiffness*0.5f, give);
+		}
 	}
 }
 
@@ -2158,11 +2161,10 @@ void GetShapeBounds(Vec3& totalLower, Vec3& totalUpper)
 }
 
 // written by Yixuan
-Mesh* CreateRandomConvexMesh(int numPlanes, float minDist, float maxDist) {
+Mesh* CreateRandomConvexMesh(int numPlanes, float minDist, float maxDist, bool regular_shape = false) {
 	Mesh* mesh = new Mesh();
 
 	const int maxPlanes = 12;
-
 	// 12-kdop
 	const Vec3 directions[maxPlanes] = { 
 		Vec3(1.0f, 0.0f, 0.0f),
@@ -2177,7 +2179,20 @@ Mesh* CreateRandomConvexMesh(int numPlanes, float minDist, float maxDist) {
 		Vec3(-1.0f, 0.0f, -1.0f),
 		Vec3(0.0f, 1.0f, 1.0f),
 		Vec3(0.0f, -1.0f, -1.0f),
-	 };
+	};
+
+	if (regular_shape) {
+		numPlanes = 6;
+		// 6-kdop
+		const Vec3 directions[maxPlanes] = { 
+			Vec3(1.0f, 0.0f, 0.0f),
+			Vec3(0.0f, 1.0f, 0.0f),
+			Vec3(0.0f, 0.0f, 1.0f),
+			Vec3(-1.0f, 0.0f, 0.0f),
+			Vec3(0.0f, -1.0f, 0.0f),
+			Vec3(0.0f, 0.0f, -1.0f),
+		};
+	}
 
 	numPlanes = Clamp(6, numPlanes, maxPlanes);
 
