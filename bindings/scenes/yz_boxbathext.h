@@ -20,7 +20,14 @@ public:
 	    *b = tmp;
 	}
 
-	void Initialize(py::array_t<float> scene_params, int thread_idx = 0)
+	// void Initialize(py::array_t<float> scene_params, int thread_idx = 0)
+	void Initialize(py::array_t<float> scene_params, 
+                    py::array_t<float> vertices,
+                    py::array_t<int> stretch_edges,
+                    py::array_t<int> bend_edges,
+                    py::array_t<int> shear_edges,
+                    py::array_t<int> faces,
+                    int thread_idx = 0)
 	{
 		float radius = 0.1f;
 
@@ -57,7 +64,7 @@ public:
 		//CreateParticleShape(GetFilePathByPlatform(bunny_path).c_str(), Vec3(2.0f, 0.0f, 1.0f), 0.5f, 0.0f, s, Vec3(0.0f, 0.0f, 0.0f), m, true, 1.0f, NvFlexMakePhase(group++, 0), true, 0.0f);
 		//CreateParticleShape(GetFilePathByPlatform(box_path).c_str(), Vec3(2.0f, 0.0f, 0.0f), 0.45f, 0.0f, s, Vec3(0.0f, 0.0f, 0.0f), m, true, 1.0f, NvFlexMakePhase(group++, 0), true, 0.0f);
 
-		g_numSolidParticles = g_buffers->positions.size();		
+		g_numSolidParticles = g_buffers->positions.size();  
 
 		float restDistance = radius*0.55f;
 

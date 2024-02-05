@@ -2471,26 +2471,26 @@ void pyflex_init(bool headless=false) {
 
     // Customized scenes
     // scene_idx
-    g_scenes.push_back(new yz_BunnyBath("Bunny Bath", true));
-    g_scenes.push_back(new yz_BoxBath("Box Bath", true));
-    g_scenes.push_back(new yz_DamBreak("Dam Break", true));
-    g_scenes.push_back(new yz_RigidFall("Rigid Fall"));
-    g_scenes.push_back(new yz_RiceFall("Rice Fall")); // Fluid Fall 4
-    g_scenes.push_back(new yz_SoftBody("Plastic Stack")); //5
-    g_scenes.push_back(new yz_FluidShake("Fluid Shake"));
-    g_scenes.push_back(new yz_BoxBathExt("Box Bath Extension", true));
-    g_scenes.push_back(new yz_FluidIceShake("Fluid Ice Shake"));
-    g_scenes.push_back(new yz_MassRope("Mass Rope"));
-    g_scenes.push_back(new yz_FlagCloth("Flag Cloth"));
-    g_scenes.push_back(new yz_SoftRod("Soft Rod"));
-    g_scenes.push_back(new yz_ClothRigid("Cloth Rigid"));
-    g_scenes.push_back(new yz_Granular("Granular"));
-    g_scenes.push_back(new yz_BunnyGrip("BunnyGrip"));
-    g_scenes.push_back(new yz_ClothManip("ClothManip"));
-    g_scenes.push_back(new yz_SoftFall("SoftFall"));
-    g_scenes.push_back(new yz_FluidPour("FluidPour"));
-    g_scenes.push_back(new yz_GranularManip("GranularManip"));
-    g_scenes.push_back(new yz_FluidAndBox("FluidAndBox"));
+    g_scenes.push_back(new yz_BunnyBath("Bunny Bath", true)); //0
+    g_scenes.push_back(new yz_BoxBath("Box Bath", true)); //1
+    g_scenes.push_back(new yz_BoxBathExt("Box Bath Extension", true)); //2
+    g_scenes.push_back(new yz_DamBreak("Dam Break", true)); //3
+    g_scenes.push_back(new yz_RigidFall("Rigid Fall")); //4
+    g_scenes.push_back(new yz_RiceFall("Rice Fall")); //5
+    g_scenes.push_back(new yz_SoftBody("Plastic Stack")); //6
+    g_scenes.push_back(new yz_FluidShake("Fluid Shake")); //7
+    g_scenes.push_back(new yz_FluidIceShake("Fluid Ice Shake")); //8
+    g_scenes.push_back(new yz_MassRope("Mass Rope")); //9
+    g_scenes.push_back(new yz_FlagCloth("Flag Cloth")); //10
+    g_scenes.push_back(new yz_SoftRod("Soft Rod")); //11
+    g_scenes.push_back(new yz_ClothRigid("Cloth Rigid")); //12
+    g_scenes.push_back(new yz_Granular("Granular")); //13
+    g_scenes.push_back(new yz_BunnyGrip("BunnyGrip")); //14
+    g_scenes.push_back(new yz_ClothManip("ClothManip")); //15
+    g_scenes.push_back(new yz_SoftFall("SoftFall")); //16
+    g_scenes.push_back(new yz_FluidPour("FluidPour")); //17
+    g_scenes.push_back(new yz_GranularManip("GranularManip")); //18
+    g_scenes.push_back(new yz_FluidAndBox("FluidAndBox")); //19
     g_scenes.push_back(new yx_Coffee("Coffee")); //20
     g_scenes.push_back(new yx_Capsule("Capsule")); //21
     g_scenes.push_back(new yx_Carrots("Carrots")); //22
@@ -2510,6 +2510,7 @@ void pyflex_init(bool headless=false) {
     g_scenes.push_back(new by_BowlFluid("Bowl Fluid")); //36
     g_scenes.push_back(new by_SoftBody("Soft Body")); //37
     g_scenes.push_back(new by_RopeGranular("Rope Granular")); //38
+    g_scenes.push_back(new by_RigidRope("Rigid Rope")); //39
 
     /*
     // opening scene
@@ -3881,7 +3882,10 @@ py::array_t<float> pyflex_render(
 PYBIND11_MODULE(pyflex, m) {
     m.def("main", &main);
 
-    m.def("init", &pyflex_init);
+    //m.def("init", &pyflex_init);
+    m.def("init", &pyflex_init,
+        py::arg("headless") = false
+    );
     // m.def("set_scene", &pyflex_set_scene);
     m.def("set_scene", &pyflex_set_scene,
           py::arg("scene_idx") = 0,

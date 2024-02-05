@@ -8,7 +8,7 @@ import cv2
 pyflex.init(headless=False)
 
 # scene idx and params
-scene_idx = 1
+scene_idx = 0
 scene_params = np.array([])
 pyflex.set_scene(scene_idx, scene_params, 0)
 
@@ -34,7 +34,7 @@ pyflex.set_light_dir(light_dir / np.linalg.norm(light_dir))
 pyflex.set_light_fov(light_fov)
 
 # save dir
-des_dir = 'out/test_BoxBath'
+des_dir = 'out/test_BunnyBath'
 os.makedirs(des_dir, exist_ok=True)
 
 # main loop

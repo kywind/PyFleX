@@ -4,13 +4,30 @@ import pyflex
 import cv2
 
 
+def rand_float(lo, hi):
+    return np.random.rand() * (hi - lo) + lo
+
+x = rand_float(0.15, 0.349)
+y = rand_float(0.15, 0.349)
+z = rand_float(0.15, 0.299)
+px = rand_float(0.45, 1.2 - x)
+pz = rand_float(0.02, 0.4 - z)
+
+# x range [3, 7] --> [0.15, 0.399]
+# y range [3, 7] --> [0.15, 0.399]
+# z range [3, 6] --> [0.15, 0.349]
+# x = 0.349
+# y = 0.349
+# z = 0.299
+# px = 1.2 - x
+# pz = 0.4 - z
+
 # init pyflex
 pyflex.init(headless=False)
 
-# scene idx and params
-scene_idx = 1
-scene_params = np.array([])
-pyflex.set_scene(scene_idx, scene_params, 0)
+scene_idx = 2
+scene_params = np.array([x, y, z, px, pz])
+pyflex.set_scene(scene_idx, scene_params, thread_idx=0)
 
 # get scene bounds
 print("Scene Upper:", pyflex.get_scene_upper())
@@ -34,7 +51,7 @@ pyflex.set_light_dir(light_dir / np.linalg.norm(light_dir))
 pyflex.set_light_fov(light_fov)
 
 # save dir
-des_dir = 'out/test_BoxBath'
+des_dir = 'out/test_BoxBathExt'
 os.makedirs(des_dir, exist_ok=True)
 
 # main loop

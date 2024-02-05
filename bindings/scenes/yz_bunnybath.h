@@ -56,9 +56,9 @@ public:
 
         // void CreateParticleShape(const Mesh* srcMesh, Vec3 lower, Vec3 scale, float rotation, float spacing, Vec3 velocity, float invMass, bool rigid, float rigidStiffness, int phase, bool skin, float jitter=0.005f, Vec3 skinOffset=0.0f, float skinExpand=0.0f, Vec4 color=Vec4(0.0f), float springStiffness=0.0f)
 
-        CreateParticleShape(GetFilePathByPlatform(box_path).c_str(), Vec3(x_0, -0.0155f, z_0), 0.2f, 0.0f, s, Vec3(0.0f, 0.0f, 0.0f), m, true, 1.0f, NvFlexMakePhase(group++, 0), false, 0.0f);
-		CreateParticleShape(GetFilePathByPlatform(box_path).c_str(), Vec3(x_1, -0.0155f, z_1), 0.2f, 0.0f, s, Vec3(0.0f, 0.0f, 0.0f), m, true, 1.0f, NvFlexMakePhase(group++, 0), false, 0.0f);
-		//CreateParticleShape(GetFilePathByPlatform(bunny_path).c_str(), Vec3(3.0f, 0.0f, 0.0f), 0.5f, 0.0f, s, Vec3(0.0f, 0.0f, 0.0f), m, true, 1.0f, NvFlexMakePhase(group++, 0), true, 0.0f);
+        //CreateParticleShape(GetFilePathByPlatform(box_path).c_str(), Vec3(x_0, -0.0155f, z_0), 0.2f, 0.0f, s, Vec3(0.0f, 0.0f, 0.0f), m, true, 1.0f, NvFlexMakePhase(group++, 0), false, 0.0f);
+		//CreateParticleShape(GetFilePathByPlatform(box_path).c_str(), Vec3(x_1, -0.0155f, z_1), 0.2f, 0.0f, s, Vec3(0.0f, 0.0f, 0.0f), m, true, 1.0f, NvFlexMakePhase(group++, 0), false, 0.0f);
+		CreateParticleShape(GetFilePathByPlatform(bunny_path).c_str(), Vec3(x_0, -0.0155f, z_0), 0.5f, 0.0f, s, Vec3(0.0f, 0.0f, 0.0f), m, true, 1.0f, NvFlexMakePhase(group++, 0), true, 0.0f);
 		//CreateParticleShape(GetFilePathByPlatform(sphere_path).c_str(), Vec3(1.0f, 0.0f, 1.0f), 0.45f, 0.0f, s, Vec3(0.0f, 0.0f, 0.0f), m, true, 1.0f, NvFlexMakePhase(group++, 0), true, 0.0f);
 		//CreateParticleShape(GetFilePathByPlatform(bunny_path).c_str(), Vec3(2.0f, 0.0f, 1.0f), 0.5f, 0.0f, s, Vec3(0.0f, 0.0f, 0.0f), m, true, 1.0f, NvFlexMakePhase(group++, 0), true, 0.0f);
 		//CreateParticleShape(GetFilePathByPlatform(box_path).c_str(), Vec3(2.0f, 0.0f, 0.0f), 0.45f, 0.0f, s, Vec3(0.0f, 0.0f, 0.0f), m, true, 1.0f, NvFlexMakePhase(group++, 0), true, 0.0f);
@@ -119,7 +119,7 @@ public:
 
 		// draw options		
 		g_drawPoints = true;
-		g_drawMesh = false;
+		g_drawMesh = true;
 		g_drawEllipsoids = false;
 		g_drawDiffuse = true;
 	}
