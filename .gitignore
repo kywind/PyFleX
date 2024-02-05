@@ -14,3 +14,4 @@ bindings/examples/*.avi
 bindings/examples/*/
 
 .vscode
+/unused

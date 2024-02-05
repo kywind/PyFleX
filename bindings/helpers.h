@@ -412,7 +412,7 @@ void SkinMesh()
 	{
 		int startVertex = 0;
 
-		for (int r=0; r < g_buffers->rigidRotations.size(); ++r)
+		for (int r=0; r < g_buffers->rigidMeshSize.size(); ++r)
 		{
 			const Matrix33 rotation = g_buffers->rigidRotations[r];
 			const int numVertices = g_buffers->rigidMeshSize[r];
