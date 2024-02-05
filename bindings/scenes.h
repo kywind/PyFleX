@@ -90,12 +90,10 @@ public:
 #include "scenes/yz_fluidpour.h"
 #include "scenes/yz_granularmanip.h"
 #include "scenes/yz_fluid_and_box.h"
-
 #include "scenes/yx_coffee.h" //20
 #include "scenes/yx_capsule.h" //21
 #include "scenes/yx_carrots.h" //22
 #include "scenes/yx_coffee_capsule.h" //23
-
 #include "scenes/by_apple.h" //24
 #include "scenes/by_singleycb.h" //25
 #include "scenes/by_softrope.h" //26
@@ -103,9 +101,15 @@ public:
 #include "scenes/by_multiycb.h" //28
 #include "scenes/by_softgym_cloth.h" //29
 #include "scenes/softgym_cloth_2.h" //30
-
 #include "scenes/by_roperigid.h" //31
 #include "scenes/by_rigidgranular.h" //32
+#include "scenes/by_rigidcloth.h" //33
+#include "scenes/by_ropecloth.h"  //34
+#include "scenes/by_granular.h" //35
+#include "scenes/by_bowlfluid.h" //36
+#include "scenes/by_softbody.h" //37
+#include "scenes/by_ropegranular.h" //38
+#include "scenes/by_rigidrope.h" //39
 
 #include "scenes/adhesion.h"
 #include "scenes/armadilloshower.h" 

@@ -1,8 +1,8 @@
-class by_SoftRope: public Scene
+class by_SoftBody: public Scene
 {
 
 public:
-	by_SoftRope(const char* name) :
+	by_SoftBody(const char* name) :
 		Scene(name),
 		mRadius(0.1f),
 		mRelaxationFactor(1.0f),
@@ -163,24 +163,27 @@ public:
 
 		float collisionDistance = ptr[27];
 
-		char rope_path[100];
-		Instance rope(make_path(rope_path, "/data/rope.obj"));
-		rope.mScale = scale;
-		rope.mTranslation = trans;
-		rope.mRotation = rotate;
-		rope.mClusterSpacing = clusterSpacing;
-		rope.mClusterRadius = clusterRadius;
-		rope.mClusterStiffness = clusterStiffness;
-		rope.mLinkRadius = linkRadius;
-		rope.mLinkStiffness = linkStiffness;
-		rope.mGlobalStiffness = globalStiffness;
-		rope.mSurfaceSampling = surfaceSampling;
-		rope.mVolumeSampling = volumeSampling;
-		rope.mSkinningFalloff = skinningFalloff;
-		rope.mSkinningMaxDistance = skinningMaxDistance;
-		rope.mClusterPlasticThreshold = clusterPlasticThreshold;
-		rope.mClusterPlasticCreep = clusterPlasticCreep;
-		AddInstance(rope);
+		char box_path[100];
+		// Instance box(make_path(box_path, "/data/box.ply"));
+        Instance box(make_path(box_path, "/data/rigid/cube_mesh.ply"));
+		box.mScale = scale;
+		box.mTranslation = trans;
+		box.mRotation = rotate;
+		box.mClusterSpacing = clusterSpacing;
+		box.mClusterRadius = clusterRadius;
+		box.mClusterStiffness = clusterStiffness;
+		box.mLinkRadius = linkRadius;
+		box.mLinkStiffness = linkStiffness;
+		box.mGlobalStiffness = globalStiffness;
+		box.mSurfaceSampling = surfaceSampling;
+		box.mVolumeSampling = volumeSampling;
+		box.mSkinningFalloff = skinningFalloff;
+		box.mSkinningMaxDistance = skinningMaxDistance;
+		box.mClusterPlasticThreshold = clusterPlasticThreshold;
+		box.mClusterPlasticCreep = clusterPlasticCreep;
+		AddInstance(box);
+        
+
 
 		// no fluids or sdf based collision
 		g_solverDesc.featureMode = eNvFlexFeatureModeSimpleSolids;

@@ -15,13 +15,6 @@ public:
 
     SoftgymCloth(const char *name) : Scene(name) {}
 
-    float get_param_float(py::array_t<float> scene_params, int idx)
-    {
-        auto ptr = (float *)scene_params.request().ptr;
-        float out = ptr[idx];
-        return out;
-    }
-
     void Initialize(py::array_t<float> scene_params, 
                     py::array_t<float> vertices,
                     py::array_t<int> stretch_edges,
@@ -149,16 +142,12 @@ public:
         g_params.staticFriction = staticFriction;
         g_params.particleFriction = particleFriction;
 
-        g_numSubsteps = 4; //2
-        g_params.numIterations = 30; // 4
+        g_numSubsteps = 4; 
+        g_params.numIterations = 50; 
         g_params.radius = radius * 1.8f;
 
         g_params.damping = 1.0f;
         g_params.sleepThreshold = 0.02f;
-        
-        // g_params.dissipation = 0.0f;
-        // g_params.drag = 0.06f;
-
         g_params.relaxationFactor = 1.0f;
 
         g_params.shapeCollisionMargin = 0.04f;
@@ -167,9 +156,6 @@ public:
         g_drawPoints = render_type & 1;
         g_drawCloth = (render_type & 2) >> 1;
         g_drawSprings = false;
-
-        // g_windFrequency *= 2.0f;
-		// g_windStrength = 0.0f;
 
     }
 

@@ -1,8 +1,8 @@
-class by_SoftRope: public Scene
+class by_RopeGranular: public Scene
 {
 
 public:
-	by_SoftRope(const char* name) :
+	by_RopeGranular(const char* name) :
 		Scene(name),
 		mRadius(0.1f),
 		mRelaxationFactor(1.0f),
@@ -125,49 +125,106 @@ public:
 	{
 		auto ptr = (float *) scene_params.request().ptr;
 
-		Vec3 scale = Vec3(ptr[0], ptr[1], ptr[2]);
-		Vec3 trans = Vec3(ptr[3], ptr[4], ptr[5]);
-		
-		float radius = ptr[6];
+		float radius = ptr[0];
 		mRadius = radius;
+
+		// rigid parameters
+		float type = ptr[1];
+		float dimx_rigid = ptr[2];
+		float dimy_rigid = ptr[3];
+		float dimz_rigid = ptr[4];
+		float scale_rigid = ptr[5];
+		float mass_rigid = ptr[6];
+		float rotation = ptr[7];
+
+		// rope parameters
+		Vec3 rope_scale = Vec3(ptr[8], ptr[9], ptr[10]);
+		Vec3 rope_trans = Vec3(ptr[11], ptr[12], ptr[13]);
+
+		float clusterSpacing = ptr[14];
+		float clusterRadius = ptr[15];
+		float clusterStiffness = ptr[16];
+
+		Vec3 rotate_v = Vec3(ptr[17], ptr[18], ptr[19]);
+		float rotate_w = ptr[20];
+		Quat rope_rotate = Quat(rotate_v, rotate_w);
+
+		float linkRadius = 0.0f;
+		float linkStiffness = 1.0f;
+		float globalStiffness = 0.0f;
+		float surfaceSampling = 0.0f;
+		float volumeSampling = 4.0f;
+		float skinningFalloff = 5.0f;
+		float skinningMaxDistance = 100.0f;
+		float clusterPlasticThreshold = 0.0f;
+		float clusterPlasticCreep = 0.0f;
+
+		float relaxationFactor = 1.0f;
+		mRelaxationFactor = relaxationFactor;
+		plasticDeformation = false;
+
+		// others
+		float dynamic_friction = ptr[21];
+		float static_friction = ptr[22];
+		float viscosity = ptr[23];
+		float draw_mesh = ptr[24];
+
+		// add rigid bodies
+		float rigid_invMass = 1.0f/mass_rigid;
+		int group = 0;
+		float s = radius*0.5f;
+
+		char path[100];
+		if (type == 1)
+			make_path(path, "/data/box.ply");
+		else if (type == 3)
+			make_path(path, "/data/ycb/03_cracker_box.obj");
+		else if (type == 4)
+			make_path(path, "/data/ycb/04_sugar_box.obj");
+		else if (type == 5)
+			make_path(path, "/data/ycb/05_tomato_soup_can.obj");
+		else if (type == 6)
+			make_path(path, "/data/ycb/06_mustard_bottle.obj");
+		else if (type == 7)
+			make_path(path, "/data/ycb/07_tuna_fish_can.obj");
+		else if (type == 8)
+			make_path(path, "/data/ycb/08_pudding_box.obj");
+		else if (type == 9)
+			make_path(path, "/data/ycb/09_gelatin_box.obj");
+		else if (type == 10)
+			make_path(path, "/data/ycb/12_strawberry.obj");
+		else if (type == 11)
+			make_path(path, "/data/ycb/13_apple.obj");
+		else if (type == 12)
+			make_path(path, "/data/ycb/14_lemon.obj");
+		else if (type == 13)
+			make_path(path, "/data/ycb/15_peach.obj");	
+		else if (type == 14)
+			make_path(path, "/data/ycb/16_pear.obj");
+		else if (type == 15)
+			make_path(path, "/data/ycb/17_orange.obj");
+		else if (type == 16)
+			make_path(path, "/data/ycb/19_pitcher_base.obj");
+		else if (type == 17)
+			make_path(path, "/data/ycb/21_bleach_cleanser.obj");
+		else if (type == 18)
+			make_path(path, "/data/ycb/24_bowl.obj");
+		else if (type == 19)
+			make_path(path, "/data/ycb/35_power_drill.obj");
+		else if (type == 20)
+			make_path(path, "/data/ycb/36_wood_block.obj");
 		
-		float clusterSpacing = ptr[7];
-		float clusterRadius = ptr[8];
-		float clusterStiffness = ptr[9];
-
-		float linkRadius = ptr[10];
-		float linkStiffness = ptr[11];
-
-		float globalStiffness = ptr[12];
-
-		float surfaceSampling = ptr[13];
-		float volumeSampling = ptr[14];
-
-		float skinningFalloff = ptr[15];
-		float skinningMaxDistance = ptr[16];
-
-		float clusterPlasticThreshold = ptr[17];
-		float clusterPlasticCreep = ptr[18];
 		
-		float dynamicFriction = ptr[19];
-		float particleFrinction = ptr[20];
-		
-		int draw_mesh = (int) ptr[21];
+	
+		// g_numSolidParticles = g_buffers->positions.size();
 
-		float relaxtion_factor = ptr[22];
-		mRelaxationFactor = relaxtion_factor;
-
-		Vec3 rotate_v = Vec3(ptr[23], ptr[24], ptr[25]);
-		float rotate_w = ptr[26];
-		Quat rotate = Quat(rotate_v, rotate_w);
-
-		float collisionDistance = ptr[27];
-
+		// add rope
+		// int ropeStart = g_buffers->positions.size();
 		char rope_path[100];
 		Instance rope(make_path(rope_path, "/data/rope.obj"));
-		rope.mScale = scale;
-		rope.mTranslation = trans;
-		rope.mRotation = rotate;
+		rope.mScale = rope_scale;
+		rope.mTranslation = rope_trans;
+		rope.mRotation = rope_rotate;
 		rope.mClusterSpacing = clusterSpacing;
 		rope.mClusterRadius = clusterRadius;
 		rope.mClusterStiffness = clusterStiffness;
@@ -181,49 +238,84 @@ public:
 		rope.mClusterPlasticThreshold = clusterPlasticThreshold;
 		rope.mClusterPlasticCreep = clusterPlasticCreep;
 		AddInstance(rope);
+		
+		// rigid
+		CreateParticleShape(
+		        GetFilePathByPlatform(path).c_str(),
+				Vec3(dimx_rigid, dimy_rigid, dimz_rigid),
+				scale_rigid, rotation, s, Vec3(0.0f, 0.0f, 0.0f), 
+				rigid_invMass, true, 1.0, NvFlexMakePhase(group++, 0), true, 0.0f,
+				0.0f, 0.0f, Vec4(0.0f), 0.0f, true);
+
+		// build soft bodies
+		if (g_buffers->rigidIndices.empty())
+			g_buffers->rigidOffsets.push_back(0);
+	
+		mRenderingInstances.resize(0);
+
+		//std::cout << "group before rope:" << group << std::endl; 
+		std::cout << "g_buffers->rigidOffsets:" << g_buffers->rigidOffsets.size() << std::endl; //1
+		// number of particles
+		std::cout << "g_buffers->positions:" << g_buffers->positions.size() << std::endl; //7021
+		std::cout << g_buffers->rigidMeshSize[0] << std::endl; //0
+		// rope
+		CreateSoftBody(mInstances[0], group++);
+		std::cout << "group after rope:" << group << std::endl; 
 
 		// no fluids or sdf based collision
 		g_solverDesc.featureMode = eNvFlexFeatureModeSimpleSolids;
 
-		g_params.radius = radius;
-		g_params.dynamicFriction = dynamicFriction;
-		g_params.particleFriction = particleFrinction;
-		g_params.numIterations = 4;
-		g_params.collisionDistance = collisionDistance;
-
-		g_params.relaxationFactor = mRelaxationFactor;
-
-		g_windStrength = 0.0f;
-
 		g_numSubsteps = 2;
+		g_params.numIterations = 4;
 
-		// draw options
-		g_drawPoints = draw_mesh == 1 ? false : true;
-		g_wireframe = false;
-		g_drawSprings = false;
-		g_drawBases = false;
-		g_drawMesh = draw_mesh == 1 ? true : false;
+		g_params.radius = radius;
+		g_params.dynamicFriction = dynamic_friction;
+		g_params.staticFriction = static_friction;
+		g_params.viscosity = viscosity;
 
-		g_buffers->rigidOffsets.push_back(0);
+		g_params.particleCollisionMargin = g_params.radius*0.25f;	// 5% collision margin
+		g_params.sleepThreshold = g_params.radius*0.25f;
+		g_params.shockPropagation = 6.f;
+		g_params.restitution = 0.2f;
+		g_params.relaxationFactor = 1.f;
+		g_params.damping = 0.14f;
 
-		mRenderingInstances.resize(0);
+		float restDistance = radius*0.55f;
+		Emitter e1;
+		e1.mDir = Vec3(1.0f, 0.0f, 0.0f);
+		e1.mRight = Vec3(0.0f, 0.0f, -1.0f);
+		e1.mPos = Vec3(radius, 1.f, 0.65f);
+		e1.mSpeed = (restDistance/g_dt)*2.0f; // 2 particle layers per-frame
+		e1.mEnabled = true;
 
-		// build soft bodies 
-		// for (int i = 0; i < int(mInstances.size()); i++)
-		CreateSoftBody(mInstances[0], mRenderingInstances.size());
+		g_emitters.push_back(e1);
 
-		if (mPlinth) 
-			AddPlinth();
+		g_waveFloorTilt = 0.0f;
+		g_waveFrequency = 1.5f;
+		g_waveAmplitude = 2.0f;
+		
+		g_warmup = false;
 
-		// fix any particles below the ground plane in place
-		for (int i = 0; i < int(g_buffers->positions.size()); ++i)
-			if (g_buffers->positions[i].y < 0.4f)
-				g_buffers->positions[i].w = 0.0f;
+		if (draw_mesh) {
+			g_drawMesh = true;
+			g_drawPoints = false;
+			g_drawSprings = false;
+		} else {
+			g_drawMesh = false;
+			g_drawPoints = true;
+			g_drawSprings = false;
+		};
+
+		printf("finish scenes\n");
+
+		
 
 		// expand radius for better self collision
-		g_params.radius *= 1.5f;
+		// g_params.radius *= 1.5f;
 
-		g_lightDistance *= 1.5f;
+		// g_lightDistance *= 1.5f;
+
+		
 	}
 
 	void CreateSoftBody(Instance instance, int group = 0, bool texture=false)
@@ -293,8 +385,14 @@ public:
 		const int particleOffset = g_buffers->positions.size();
 		const int indexOffset = g_buffers->rigidOffsets.back();
 
+		// std::cout << "particleOffset:" << particleOffset << std::endl; //0->7021
+		// std::cout << "indexOffset:" << indexOffset << std::endl; //0->7021
+		
+		std::cout << "asset->numShapeIndices:" << asset->numShapeIndices << std::endl; //3213
+		std::cout << "asset->numShapes:" << asset->numShapes << std::endl; //50
+		std::cout << "asset->numParticles:" << asset->numParticles << std::endl; //1024
+
 		// add particle data to solver
-		std::cout << "asset->numShapes:" << asset->numShapes << std::endl;
 		for (int i = 0; i < asset->numParticles; ++i)
 		{
 			g_buffers->positions.push_back(&asset->particles[i * 4]);
@@ -304,18 +402,37 @@ public:
 			g_buffers->phases.push_back(phase);
 		}
 
+		std::cout << "rigidIndices 1:" << g_buffers->rigidIndices.size() << std::endl; //7021
+		std::cout << "rigidOffsets 1:" << g_buffers->rigidOffsets.size() << std::endl; //2 -> 0, 7021
+
 		// add shape data to solver
 		for (int i = 0; i < asset->numShapeIndices; ++i)
+		{
 			g_buffers->rigidIndices.push_back(asset->shapeIndices[i] + particleOffset);
+		}
 
+		// make cluster
+		// g_buffers->rigidOffsets.push_back(indexOffset);
+		//asset->numShapes
+		//int prevShapeOffset = 0;
 		for (int i = 0; i < asset->numShapes; ++i)
 		{
-			g_buffers->rigidOffsets.push_back(asset->shapeOffsets[i] + indexOffset);
-			g_buffers->rigidTranslations.push_back(Vec3(&asset->shapeCenters[i * 3]));
+			// std::cout << "i:" << i << std::endl;
+			// std::cout << "numShapes:" << asset->numShapes << std::endl;
+			// std::cout << "rigidOffsets:" << g_buffers->rigidOffsets.size() << std::endl;
+			// std::cout << "rigidRotation:" << g_buffers->rigidRotations.size() << std::endl;
+			// std::cout << "rigidTranslations:" << g_buffers->rigidTranslations.size() << std::endl;
+			// std::cout << "rigidMeshSize:" << g_buffers->rigidMeshSize.size() << std::endl;
+			// std::cout << "indexOffset:" << indexOffset << std::endl;
+			// std::cout << "asset->shapeOffsets[i]:" << asset->shapeOffsets[i] << std::endl;
+			g_buffers->rigidOffsets.push_back(asset->shapeOffsets[i] + indexOffset); //make bug
+			//int numMeshParticles = asset->shapeOffsets[i] - prevShapeOffset;
+			//prevShapeOffset = asset->shapeOffsets[i];
+			//g_buffers->rigidMeshSize.push_back(numMeshParticles);
+			// g_buffers->rigidTranslations.push_back(Vec3(&asset->shapeCenters[i * 3])); //make rigid bodies disappear
 			g_buffers->rigidRotations.push_back(Quat());
 			g_buffers->rigidCoefficients.push_back(asset->shapeCoefficients[i]);
 		}
-
 
 		// add plastic deformation data to solver, if at least one asset has non-zero plastic deformation coefficients, leave the according pointers at NULL otherwise
 		if (plasticDeformation)
@@ -363,8 +480,7 @@ public:
 		}
 
 		// add link data to the solver 
-		// std::cout << "asset->numSprings:" << asset->numSprings << std::endl;
-		 std::cout << "asset->numSprings:" << asset->numSprings << std::endl;
+		// std::cout << "asset->numSprings:" << asset->numSprings << std::endl; //0
 		for (int i = 0; i < asset->numSprings; ++i)
 		{
 			g_buffers->springIndices.push_back(asset->springIndices[i * 2 + 0]);

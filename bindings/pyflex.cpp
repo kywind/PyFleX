@@ -2476,43 +2476,25 @@ void pyflex_init(bool headless=false) {
     g_scenes.push_back(new yz_DamBreak("Dam Break", true));
     g_scenes.push_back(new yz_RigidFall("Rigid Fall"));
     g_scenes.push_back(new yz_RiceFall("Rice Fall")); // Fluid Fall 4
-
-    auto *plasticStackScene = new yz_SoftBody("Plastic Stack"); 
-    g_scenes.push_back(plasticStackScene); //5
-
+    g_scenes.push_back(new yz_SoftBody("Plastic Stack")); //5
     g_scenes.push_back(new yz_FluidShake("Fluid Shake"));
     g_scenes.push_back(new yz_BoxBathExt("Box Bath Extension", true));
     g_scenes.push_back(new yz_FluidIceShake("Fluid Ice Shake"));
-
     g_scenes.push_back(new yz_MassRope("Mass Rope"));
     g_scenes.push_back(new yz_FlagCloth("Flag Cloth"));
-
     g_scenes.push_back(new yz_SoftRod("Soft Rod"));
-
     g_scenes.push_back(new yz_ClothRigid("Cloth Rigid"));
-
     g_scenes.push_back(new yz_Granular("Granular"));
-
     g_scenes.push_back(new yz_BunnyGrip("BunnyGrip"));
-
     g_scenes.push_back(new yz_ClothManip("ClothManip"));
-
     g_scenes.push_back(new yz_SoftFall("SoftFall"));
-
     g_scenes.push_back(new yz_FluidPour("FluidPour"));
-
     g_scenes.push_back(new yz_GranularManip("GranularManip"));
-
     g_scenes.push_back(new yz_FluidAndBox("FluidAndBox"));
-
     g_scenes.push_back(new yx_Coffee("Coffee")); //20
-
     g_scenes.push_back(new yx_Capsule("Capsule")); //21
-
     g_scenes.push_back(new yx_Carrots("Carrots")); //22
-
     g_scenes.push_back(new yx_Coffee_Capsule("Coffee_Capsule")); //23
-
     g_scenes.push_back(new by_Apple("Apple")); //24
     g_scenes.push_back(new by_SingleYCB("Single YCB")); // 25
     g_scenes.push_back(new by_SoftRope("Soft Rope")); //26
@@ -2520,10 +2502,14 @@ void pyflex_init(bool headless=false) {
     g_scenes.push_back(new by_MultiYCB("Multi YCB")); //28
     g_scenes.push_back(new SoftgymCloth("Softgym Flag Cloth")); //29
     g_scenes.push_back(new SoftgymCloth2("Softgym Cloth")); //30
-
     g_scenes.push_back(new by_RopeRigid("Rope Rigid")); //31
     g_scenes.push_back(new by_RigidGranular("Rigid Granular")); //32
-
+    g_scenes.push_back(new by_RigidCloth("Rigid Cloth")); //33
+    g_scenes.push_back(new by_RopeCloth("Rope Cloth")); //34
+    g_scenes.push_back(new by_Granular("Bowl Granular")); //35
+    g_scenes.push_back(new by_BowlFluid("Bowl Fluid")); //36
+    g_scenes.push_back(new by_SoftBody("Soft Body")); //37
+    g_scenes.push_back(new by_RopeGranular("Rope Granular")); //38
 
     /*
     // opening scene
