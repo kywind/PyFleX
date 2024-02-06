@@ -2,10 +2,10 @@
 
 ## Install
 ```
-# ensure docker-ce is installed (https://docs.docker.com/engine/install/ubuntu/)
-# ensure nvidia-docker is installed. This is by:
-# sudo apt-get install -y nvidia-container-toolkit
-# sudo systemctl restart docker (docker service name can be found by sudo systemctl list-units --type=service | grep -i docker)
+# 1) install anaconda (https://docs.anaconda.com/free/anaconda/install/linux/)
+# 2) install docker-ce (https://docs.docker.com/engine/install/ubuntu/)
+# 3) install nvidia-container-toolkit (https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html)
+# 4) restart docker by sudo systemctl restart docker (docker service name can be found by ```sudo systemctl list-units --type=service | grep -i docker```)
 
 # preparations
 cd third-party
@@ -27,7 +27,7 @@ sudo docker run \
     -c "export PATH=/workspace/anaconda/bin:$PATH; cd /workspace/PyFleX; export PYFLEXROOT=/workspace/PyFleX; export PYTHONPATH=/workspace/PyFleX/bindings/build:$PYTHONPATH; export LD_LIBRARY_PATH=$PYFLEXROOT/external/SDL2-2.0.4/lib/x64:$LD_LIBRARY_PATH; cd bindings; mkdir build; cd build; /usr/bin/cmake ..; make -j"
 
 # run these if you do not have these paths yet in ~/.bashrc
-echo '' >> ~/.bashrc
+echo '# PyFleX' >> ~/.bashrc
 echo "export PYFLEXROOT=${PWD}/PyFleX" >> ~/.bashrc
 echo 'export PYTHONPATH=${PYFLEXROOT}/bindings/build:$PYTHONPATH' >> ~/.bashrc
 echo 'export LD_LIBRARY_PATH=${PYFLEXROOT}/external/SDL2-2.0.4/lib/x64:$LD_LIBRARY_PATH' >> ~/.bashrc
@@ -35,6 +35,15 @@ echo '' >> ~/.bashrc
 
 # finally, restart the terminal
 ```
+
+## Try pre-compiled demo
+click on /PyFleX/precompiled_demo/linux64/NvFlexDemoReleaseCUDA_x64
+or run 
+```
+./precompiled_demo/linux64/NvFlexDemoReleaseCUDA_x64
+```
+inside /PyFleX.
+
 
 ## Run Examples
 ```
