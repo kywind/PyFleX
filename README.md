@@ -5,7 +5,7 @@
 # 1) install anaconda (https://docs.anaconda.com/free/anaconda/install/linux/)
 # 2) install docker-ce (https://docs.docker.com/engine/install/ubuntu/)
 # 3) install nvidia-container-toolkit (https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html)
-# 4) restart docker by sudo systemctl restart docker (docker service name can be found by ```sudo systemctl list-units --type=service | grep -i docker```)
+# 4) restart docker by `sudo systemctl restart docker` (docker service name can be found by `sudo systemctl list-units --type=service | grep -i docker`)
 
 # preparations
 cd third-party
@@ -37,12 +37,7 @@ echo '' >> ~/.bashrc
 ```
 
 ## Try pre-compiled demo
-click on /PyFleX/precompiled_demo/linux64/NvFlexDemoReleaseCUDA_x64
-or run 
-```
-./precompiled_demo/linux64/NvFlexDemoReleaseCUDA_x64
-```
-inside /PyFleX.
+click on /PyFleX/precompiled_demo/linux64/NvFlexDemoReleaseCUDA_x64 or run `./precompiled_demo/linux64/NvFlexDemoReleaseCUDA_x64` inside /PyFleX.
 
 
 ## Run Examples
