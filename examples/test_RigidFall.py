@@ -6,37 +6,47 @@ import cv2
 
 # user-configurable params
 OUT_DIR = 'out/test_RigidFall'  # output directory
-N_INSTANCES = 1     # number of instances of the object to drop
-BOX_WIDTH, BOX_HEIGHT, BOX_DEPTH = 1, 1, 1  # box dimensions
-SCREEN_HEIGHT, SCREEN_WIDTH = 720, 720  # screen dimensions
-CAM_X, CAM_Y, CAM_Z = 0.6, 1.0, 2.0  # camera position
+N_INSTANCES = 10000     # number of instances of the object to drop
+BOX_WIDTH, BOX_HEIGHT, BOX_DEPTH = 1, 0.5, 1  # box dimensions
+SCREEN_HEIGHT, SCREEN_WIDTH = 720, 720  # screen dimensions (CAVEAT: at the moment, only (720, 720) is supported)
+CAM_X, CAM_Y, CAM_Z = 0.5, 10.0, 0.5  # camera position
 CAM_ROLL, CAM_PITCH, CAM_YAW = 0, -15, 0  # camera orientation (degree)
 LIGHT_ROLL, LIGHT_PITCH, LIGHT_YAW = 5, 15, 7.5  # light orientation (rad)
-SIM_HORIZON = 150  # simulation horizon, i.e., # of steps
+DRAW_MESH = False  # whether to draw the mesh
+SIM_HORIZON = 1000  # simulation horizon, i.e., # of steps
 
 # constants
 kSCENE_INDEX = 4
+kGRAVITY = -9.8
 
 # helper functions
 def random_float(lb, ub):
     return lb + (ub - lb) * np.random.rand()
+
+def sample_pos_in_box(box_width=BOX_WIDTH, box_height=BOX_HEIGHT, box_depth=BOX_DEPTH):
+    x = random_float(-box_width / 2, box_width / 2)
+    y = random_float(0, box_height)
+    z = random_float(-box_depth / 2, box_depth / 2)
+    return np.array([x, y, z])
 
 # init pyflex
 os.makedirs(OUT_DIR, exist_ok=True)
 pyflex.init(headless=False)
 
 # setup scene params
-scene_params = np.zeros(N_INSTANCES * 3 + 1)
+scene_params = np.zeros(N_INSTANCES * 3 + 3)
 scene_params[0] = N_INSTANCES
+scene_params[1] = kGRAVITY
 lb = 0.09
 for i in range(N_INSTANCES):
-    scene_params[3 * i + 1] = random_float(0, 0.1)
-    scene_params[3 * i + 2] = random_float(lb, lb + 0.01)
-    scene_params[3 * i + 3] = random_float(0, 0.1)
+    # scene_params[3 * i + 2:3 * i + 5] = sample_pos_in_box()
+    scene_params[3 * i + 2] = random_float(0, 0.5)
+    scene_params[3 * i + 3] = random_float(lb, lb + 0.01)
+    scene_params[3 * i + 4] = random_float(0, 0.5)
     lb += 0.21
+scene_params[-1] = DRAW_MESH
 
 # setup scene
-print(f"Scene Params: {scene_params}")
 pyflex.set_scene(kSCENE_INDEX, scene_params, thread_idx=0)
 
 print("Scene Upper:", pyflex.get_scene_lower())
@@ -50,7 +60,7 @@ pyflex.set_camAngle(cam_angle)
 
 # setup light
 light_dir = np.array([LIGHT_ROLL, LIGHT_PITCH, LIGHT_YAW])
-light_fov = 0.
+light_fov = 70.
 pyflex.set_light_dir(light_dir / np.linalg.norm(light_dir))
 pyflex.set_light_fov(light_fov)
 
