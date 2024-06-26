@@ -15,9 +15,9 @@ sudo docker pull xingyu/softgym
 
 # compile pyflex in docker image
 # re-compile if source code changed
-# make sure ${PWD}/PyFleX is the pyflex root path when re-compiling
+# make sure ${PWD}/PyFleX-dynamics is the pyflex root path when re-compiling
 sudo docker run \
-    -v ${PWD}/PyFleX:/workspace/PyFleX \
+    -v ${PWD}/PyFleX-dynamics:/workspace/PyFleX \
     -v ${CONDA_PREFIX}:/workspace/anaconda \
     -v /tmp/.X11-unix:/tmp/.X11-unix \
     --gpus all \
@@ -28,7 +28,7 @@ sudo docker run \
 
 # run these if you do not have these paths yet in ~/.bashrc
 echo '# PyFleX' >> ~/.bashrc
-echo "export PYFLEXROOT=${PWD}/PyFleX" >> ~/.bashrc
+echo "export PYFLEXROOT=${PWD}/PyFleX-dynamics" >> ~/.bashrc
 echo 'export PYTHONPATH=${PYFLEXROOT}/bindings/build:$PYTHONPATH' >> ~/.bashrc
 echo 'export LD_LIBRARY_PATH=${PYFLEXROOT}/external/SDL2-2.0.4/lib/x64:$LD_LIBRARY_PATH' >> ~/.bashrc
 echo '' >> ~/.bashrc

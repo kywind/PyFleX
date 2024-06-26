@@ -541,7 +541,7 @@ inline float sqr(float x) { return x*x; }
 
 void InitRenderHeadless(const RenderInitOptions& options, int width, int height); //add
 
-void Init(int scene, py::array_t<float> scene_params, 
+void Init(int scene, py::array_t<float> scene_params, char* mesh_path,
         py::array_t<float> vertices, py::array_t<int> stretch_edges,
         py::array_t<int> bend_edges, py::array_t<int> shear_edges, py::array_t<int> faces,
             bool centerCamera = true, int thread_idx = 0) {
@@ -752,7 +752,8 @@ void Init(int scene, py::array_t<float> scene_params,
     // create scene
     StartGpuWork();
     // g_scenes[g_scene]->Initialize(scene_params, thread_idx);
-    g_scenes[g_scene]->Initialize(scene_params, vertices, stretch_edges, bend_edges, shear_edges, faces, thread_idx);
+    //g_scenes[g_scene]->Initialize(scene_params, vertices, stretch_edges, bend_edges, shear_edges, faces, thread_idx);
+    g_scenes[g_scene]->Initialize(scene_params, mesh_path, vertices, stretch_edges, bend_edges, shear_edges, faces, thread_idx);
     EndGpuWork();
 
     uint32_t numParticles = g_buffers->positions.size();
@@ -2471,46 +2472,46 @@ void pyflex_init(bool headless=false) {
 
     // Customized scenes
     // scene_idx
-    g_scenes.push_back(new yz_BunnyBath("Bunny Bath", true)); //0
-    g_scenes.push_back(new yz_BoxBath("Box Bath", true)); //1
-    g_scenes.push_back(new yz_BoxBathExt("Box Bath Extension", true)); //2
-    g_scenes.push_back(new yz_DamBreak("Dam Break", true)); //3
-    g_scenes.push_back(new yz_RigidFall("Rigid Fall")); //4
-    g_scenes.push_back(new yz_RiceFall("Rice Fall")); //5
-    g_scenes.push_back(new yz_SoftBody("Plastic Stack")); //6
-    g_scenes.push_back(new yz_FluidShake("Fluid Shake")); //7
-    g_scenes.push_back(new yz_FluidIceShake("Fluid Ice Shake")); //8
-    g_scenes.push_back(new yz_MassRope("Mass Rope")); //9
-    g_scenes.push_back(new yz_FlagCloth("Flag Cloth")); //10
-    g_scenes.push_back(new yz_SoftRod("Soft Rod")); //11
-    g_scenes.push_back(new yz_ClothRigid("Cloth Rigid")); //12
-    g_scenes.push_back(new yz_Granular("Granular")); //13
-    g_scenes.push_back(new yz_BunnyGrip("BunnyGrip")); //14
-    g_scenes.push_back(new yz_ClothManip("ClothManip")); //15
-    g_scenes.push_back(new yz_SoftFall("SoftFall")); //16
-    g_scenes.push_back(new yz_FluidPour("FluidPour")); //17
-    g_scenes.push_back(new yz_GranularManip("GranularManip")); //18
-    g_scenes.push_back(new yz_FluidAndBox("FluidAndBox")); //19
-    g_scenes.push_back(new yx_Coffee("Coffee")); //20
-    g_scenes.push_back(new yx_Capsule("Capsule")); //21
-    g_scenes.push_back(new yx_Carrots("Carrots")); //22
-    g_scenes.push_back(new yx_Coffee_Capsule("Coffee_Capsule")); //23
-    g_scenes.push_back(new by_Apple("Apple")); //24
-    g_scenes.push_back(new by_SingleYCB("Single YCB")); // 25
+    //g_scenes.push_back(new yz_BunnyBath("Bunny Bath", true)); //0
+    //g_scenes.push_back(new yz_BoxBath("Box Bath", true)); //1
+    //g_scenes.push_back(new yz_BoxBathExt("Box Bath Extension", true)); //2
+    //g_scenes.push_back(new yz_DamBreak("Dam Break", true)); //3
+    //g_scenes.push_back(new yz_RigidFall("Rigid Fall")); //4
+    //g_scenes.push_back(new yz_RiceFall("Rice Fall")); //5
+    //g_scenes.push_back(new yz_SoftBody("Plastic Stack")); //6
+    //g_scenes.push_back(new yz_FluidShake("Fluid Shake")); //7
+    //g_scenes.push_back(new yz_FluidIceShake("Fluid Ice Shake")); //8
+    //g_scenes.push_back(new yz_MassRope("Mass Rope")); //9
+    //g_scenes.push_back(new yz_FlagCloth("Flag Cloth")); //10
+    //g_scenes.push_back(new yz_SoftRod("Soft Rod")); //11
+    //g_scenes.push_back(new yz_ClothRigid("Cloth Rigid")); //12
+    //g_scenes.push_back(new yz_Granular("Granular")); //13
+    //g_scenes.push_back(new yz_BunnyGrip("BunnyGrip")); //14
+    //g_scenes.push_back(new yz_ClothManip("ClothManip")); //15
+    //g_scenes.push_back(new yz_SoftFall("SoftFall")); //16
+    //g_scenes.push_back(new yz_FluidPour("FluidPour")); //17
+    //g_scenes.push_back(new yz_GranularManip("GranularManip")); //18
+    //g_scenes.push_back(new yz_FluidAndBox("FluidAndBox")); //19
+    //g_scenes.push_back(new yx_Coffee("Coffee")); //20
+    //g_scenes.push_back(new yx_Capsule("Capsule")); //21
+    //g_scenes.push_back(new yx_Carrots("Carrots")); //22
+    //g_scenes.push_back(new yx_Coffee_Capsule("Coffee_Capsule")); //23
+    //g_scenes.push_back(new by_Apple("Apple")); //24
+    //g_scenes.push_back(new by_SingleYCB("Single YCB")); // 25
     g_scenes.push_back(new by_SoftRope("Soft Rope")); //26
-    g_scenes.push_back(new by_Cloth("Cloth")); //27
-    g_scenes.push_back(new by_MultiYCB("Multi YCB")); //28
+    //g_scenes.push_back(new by_Cloth("Cloth")); //27
+    //g_scenes.push_back(new by_MultiYCB("Multi YCB")); //28
     g_scenes.push_back(new SoftgymCloth("Softgym Flag Cloth")); //29
-    g_scenes.push_back(new SoftgymCloth2("Softgym Cloth")); //30
-    g_scenes.push_back(new by_RopeRigid("Rope Rigid")); //31
-    g_scenes.push_back(new by_RigidGranular("Rigid Granular")); //32
-    g_scenes.push_back(new by_RigidCloth("Rigid Cloth")); //33
-    g_scenes.push_back(new by_RopeCloth("Rope Cloth")); //34
+    //g_scenes.push_back(new SoftgymCloth2("Softgym Cloth")); //30
+    //g_scenes.push_back(new by_RopeRigid("Rope Rigid")); //31
+    //g_scenes.push_back(new by_RigidGranular("Rigid Granular")); //32
+    //g_scenes.push_back(new by_RigidCloth("Rigid Cloth")); //33
+    //g_scenes.push_back(new by_RopeCloth("Rope Cloth")); //34
     g_scenes.push_back(new by_Granular("Bowl Granular")); //35
-    g_scenes.push_back(new by_BowlFluid("Bowl Fluid")); //36
-    g_scenes.push_back(new by_SoftBody("Soft Body")); //37
-    g_scenes.push_back(new by_RopeGranular("Rope Granular")); //38
-    g_scenes.push_back(new by_RigidRope("Rigid Rope")); //39
+    //g_scenes.push_back(new by_BowlFluid("Bowl Fluid")); //36
+    //g_scenes.push_back(new by_SoftBody("Soft Body")); //37
+    //g_scenes.push_back(new by_RopeGranular("Rope Granular")); //38
+    //g_scenes.push_back(new by_RigidRope("Rigid Rope")); //39
 
     /*
     // opening scene
@@ -2933,6 +2934,7 @@ float rand_float(float LO, float HI) {
 void pyflex_set_scene(
     int scene_idx,
     py::array_t<float> scene_params,
+    char* mesh_path,
     py::array_t<float> vertices,
     py::array_t<int> stretch_edges,
     py::array_t<int> bend_edges,
@@ -2942,7 +2944,10 @@ void pyflex_set_scene(
 {
     g_scene = scene_idx;
     g_selectedScene = g_scene;
-    Init(g_selectedScene, scene_params, vertices,
+    //Init(g_selectedScene, scene_params, vertices,
+    //     stretch_edges, bend_edges, shear_edges, faces,
+    //     true, thread_idx);
+    Init(g_selectedScene, scene_params, mesh_path, vertices,
          stretch_edges, bend_edges, shear_edges, faces,
          true, thread_idx);
 }
@@ -3472,25 +3477,25 @@ void pyflex_reset_colors() {
 }
 
 py::array_t<float> pyflex_get_sceneParams() {
-    if (g_scene == 5) {
-        auto params = py::array_t<float>(3);
-        auto ptr = (float *) params.request().ptr;
+    // if (g_scene == 5) {
+    //     auto params = py::array_t<float>(3);
+    //     auto ptr = (float *) params.request().ptr;
 
-        ptr[0] = ((yz_SoftBody *) g_scenes[g_scene])->mInstances[0].mClusterStiffness;
-        ptr[1] = ((yz_SoftBody *) g_scenes[g_scene])->mInstances[0].mClusterPlasticThreshold * 1e4f;
-        ptr[2] = ((yz_SoftBody *) g_scenes[g_scene])->mInstances[0].mClusterPlasticCreep;
+    //     ptr[0] = ((yz_SoftBody *) g_scenes[g_scene])->mInstances[0].mClusterStiffness;
+    //     ptr[1] = ((yz_SoftBody *) g_scenes[g_scene])->mInstances[0].mClusterPlasticThreshold * 1e4f;
+    //     ptr[2] = ((yz_SoftBody *) g_scenes[g_scene])->mInstances[0].mClusterPlasticCreep;
 
-        return params;
-    }
-    else {
-        printf("Unsupprted scene_idx %d\n", g_scene);
+    //     return params;
+    // }
+    // else {
+    printf("Unsupprted scene_idx %d\n", g_scene);
 
-        auto params = py::array_t<float>(1);
-        auto ptr = (float *) params.request().ptr;
-        ptr[0] = 0.0f;
+    auto params = py::array_t<float>(1);
+    auto ptr = (float *) params.request().ptr;
+    ptr[0] = 0.0f;
 
-        return params;
-    }
+    return params;
+    // }
 }
 
 py::array_t<float> pyflex_get_sceneUpper() {
@@ -3890,6 +3895,7 @@ PYBIND11_MODULE(pyflex, m) {
     m.def("set_scene", &pyflex_set_scene,
           py::arg("scene_idx") = 0,
           py::arg("scene_params") = py::array_t<float>(),
+          py::arg("mesh_path") = py::str("/home/zhangkaifeng/projects/PyFleX/data/rope.obj"),
           py::arg("vertices") = py::array_t<float>(),
           py::arg("stretch_edges") = py::array_t<int>(),
           py::arg("bend_edges") = py::array_t<int>(),

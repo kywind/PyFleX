@@ -116,6 +116,7 @@ public:
 	}
 
 	void Initialize(py::array_t<float> scene_params, 
+					char *mesh_path,
                     py::array_t<float> vertices,
                     py::array_t<int> stretch_edges,
                     py::array_t<int> bend_edges,
@@ -163,8 +164,11 @@ public:
 
 		float collisionDistance = ptr[27];
 
-		char rope_path[100];
-		Instance rope(make_path(rope_path, "/data/rope.obj"));
+		std::cout << "mesh_path:" << mesh_path << std::endl;
+		char* rope_path = new char[100];
+		strcpy(rope_path, mesh_path);
+		Instance rope(rope_path);
+
 		rope.mScale = scale;
 		rope.mTranslation = trans;
 		rope.mRotation = rotate;
@@ -228,12 +232,17 @@ public:
 
 	void CreateSoftBody(Instance instance, int group = 0, bool texture=false)
 	{
+		std::cout << "CreateSoftBody:" << instance.mFile << std::endl;
 		RenderingInstance renderingInstance;
 
+		//char* new_file_path = new char[100];
+		//strcpy(new_file_path, instance.mFile);
+		//std::cout << "new_file_path:" << new_file_path << std::endl;
+
 		Mesh* mesh = ImportMesh(GetFilePathByPlatform(instance.mFile).c_str(), texture);
-		mesh->Normalize();
-		mesh->Transform(ScaleMatrix(instance.mScale*mRadius));
-		mesh->Transform(RotationMatrix(instance.mRotation)); 
+		//mesh->Normalize();
+		//mesh->Transform(ScaleMatrix(instance.mScale*mRadius));
+		//mesh->Transform(RotationMatrix(instance.mRotation)); 
 		mesh->Transform(TranslationMatrix(Point3(instance.mTranslation)));
 		// mesh->Transform(TranslationMatrix(Point3(instance.mTranslation))*ScaleMatrix(instance.mScale*mRadius));
 		// mesh->Transform(RotationMatrix(instance.mRotation));

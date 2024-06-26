@@ -16,6 +16,7 @@ public:
     SoftgymCloth(const char *name) : Scene(name) {}
 
     void Initialize(py::array_t<float> scene_params, 
+                    char *mesh_path,
                     py::array_t<float> vertices,
                     py::array_t<int> stretch_edges,
                     py::array_t<int> bend_edges,
